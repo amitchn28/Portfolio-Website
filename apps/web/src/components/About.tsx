@@ -18,6 +18,19 @@ export const About: React.FC<AboutProps> = ({ profileData }) => {
   const { theme } = useTheme();
   const bio = profileData?.fullBio;
   const rawRoles = profileData?.shortBio;
+  const rawTagline = profileData?.tagline;
+
+  const disciplineText = React.useMemo(() => {
+    if (
+      typeof rawTagline === 'string' &&
+      rawTagline.trim().length > 0 &&
+      rawTagline.length <= 45 &&
+      !rawTagline.toLowerCase().includes('building intelligent')
+    ) {
+      return rawTagline.trim();
+    }
+    return 'Computer Science';
+  }, [rawTagline]);
 
   // Extract roles from admin-configured shortBio (comma/slash/bullet separated)
   const rolesList: string[] = React.useMemo(() => {
@@ -174,7 +187,7 @@ export const About: React.FC<AboutProps> = ({ profileData }) => {
             </span>
             <span className="text-slate-600 font-mono text-xs">|</span>
             <span className={`font-tech text-xs sm:text-sm font-semibold uppercase tracking-wider ${theme.accentText}`}>
-              Computer Engineering
+              {disciplineText}
             </span>
           </div>
 

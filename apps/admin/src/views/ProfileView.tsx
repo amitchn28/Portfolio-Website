@@ -37,7 +37,7 @@ export const ProfileView: React.FC = () => {
           setFormData({
             name: data.name || 'Amit Chauhan',
             headline: data.headline || 'Software Engineer & AI Developer',
-            tagline: data.tagline || 'Building intelligent systems, scalable full-stack web applications, and hybrid AI solutions.',
+            tagline: (data.tagline && data.tagline.length <= 40 && !data.tagline.toLowerCase().includes('building intelligent')) ? data.tagline : 'Computer Science',
             shortBio: (data.shortBio && data.shortBio.length < 80) ? data.shortBio : 'Developer, Programmer, Gamer, Coder',
             fullBio: data.fullBio || '',
             avatarUrl: data.avatarUrl || '',
@@ -305,15 +305,24 @@ export const ProfileView: React.FC = () => {
             />
           </div>
 
-          {/* Tagline */}
+          {/* Showcase Subtitle / Discipline */}
           <div className="space-y-1.5">
-            <label className="text-xs font-mono text-slate-300 font-medium">Tagline / Subheading</label>
+            <div className="flex items-center justify-between">
+              <label className="text-xs font-mono text-slate-300 font-medium">
+                Showcase Subtitle / Discipline (Next to Name)
+              </label>
+              <span className="text-[10px] font-mono text-cyan-400">e.g. Computer Science</span>
+            </div>
             <input
               type="text"
+              placeholder="Computer Science"
               value={formData.tagline}
               onChange={(e) => setFormData({ ...formData, tagline: e.target.value })}
               className="w-full px-4 py-2.5 rounded-xl bg-space-950 border border-slate-800 focus:border-purple-500 text-sm text-white focus:outline-none"
             />
+            <p className="text-[11px] text-slate-500">
+              Displayed next to your name at the bottom of the About section (e.g. {formData.name || 'Amit Chauhan'} | {formData.tagline || 'Computer Science'}).
+            </p>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-5">

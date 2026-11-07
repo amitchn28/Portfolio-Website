@@ -4,7 +4,7 @@ const API_BASE = import.meta.env.VITE_API_URL || 'http://localhost:5000/api';
 export const FALLBACK_PROFILE = {
   name: 'Amit Chauhan',
   headline: 'Software Engineer & AI Developer',
-  tagline: 'Building intelligent systems, scalable full-stack web applications, and hybrid AI solutions.',
+  tagline: 'Computer Science',
   shortBio: 'Developer, Programmer, Gamer, Coder',
   fullBio: `I am someone who thrives on learning, problem-solving, and continuous growth. My personality blends curiosity, adaptability, and persistence, which helps me approach challenges with optimism and clarity. I value collaboration and clear communication, but I am equally comfortable taking initiative and working independently.
 

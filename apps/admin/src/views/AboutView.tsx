@@ -25,7 +25,7 @@ export const AboutView: React.FC = () => {
             fullBio: data.fullBio || '',
             shortBio: (data.shortBio && data.shortBio.length < 80) ? data.shortBio : 'Developer, Programmer, Gamer, Coder',
             headline: data.headline || '',
-            tagline: data.tagline || '',
+            tagline: (data.tagline && data.tagline.length <= 40 && !data.tagline.toLowerCase().includes('building intelligent')) ? data.tagline : 'Computer Science',
           });
         }
       } catch (err: any) {
@@ -99,15 +99,24 @@ export const AboutView: React.FC = () => {
 
       <form onSubmit={handleSave} className="space-y-6">
         <div className="p-6 sm:p-8 rounded-2xl bg-space-900/80 border border-slate-800 space-y-6">
-          {/* Tagline / Academic Context */}
+          {/* Showcase Subtitle / Discipline */}
           <div className="space-y-1.5">
-            <label className="text-xs font-mono text-slate-300 font-medium">Academic Context</label>
+            <div className="flex items-center justify-between">
+              <label className="text-xs font-mono text-slate-300 font-medium">
+                Showcase Subtitle / Discipline (Next to Name)
+              </label>
+              <span className="text-[10px] font-mono text-cyan-400">e.g. Computer Science</span>
+            </div>
             <input
               type="text"
+              placeholder="Computer Science"
               value={aboutData.tagline}
               onChange={(e) => setAboutData({ ...aboutData, tagline: e.target.value })}
               className="w-full px-4 py-2.5 rounded-xl bg-space-950 border border-slate-800 focus:border-purple-500 text-sm text-white focus:outline-none"
             />
+            <p className="text-[11px] text-slate-500">
+              Displayed next to your name at the bottom of the About section (e.g. Amit Chauhan | {aboutData.tagline || 'Computer Science'}).
+            </p>
           </div>
 
           {/* Full Biography */}
