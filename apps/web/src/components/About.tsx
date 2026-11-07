@@ -138,38 +138,49 @@ export const About: React.FC<AboutProps> = ({ profileData }) => {
           </div>
         </div>
 
-        {/* Large Classy Rotating Statement (Developer -> Programmer -> Gamer -> Coder) Positioned at Bottom */}
-        <div className="mt-12 pt-10 border-t border-slate-800/80 text-center relative overflow-hidden">
-          {/* Ultra-Minimal Lead-in Label */}
-          <div className="inline-flex items-center gap-2 mb-2 text-center">
+        {/* Large Classy Showcase (Developer -> Programmer -> Gamer -> Coder) Positioned at Bottom */}
+        <div className="mt-12 pt-10 border-t border-slate-800/80 text-center relative overflow-hidden space-y-2">
+          {/* Top Line: The Portfolio Website of The */}
+          <div className="inline-flex items-center gap-2 mb-1 text-center">
             <span className="text-cyan-400 font-mono text-xs">✦</span>
-            <span className="font-mono text-[11px] sm:text-xs font-semibold tracking-[0.3em] uppercase text-slate-400">
-              THE
+            <span className="font-tech text-xs sm:text-sm font-semibold tracking-widest uppercase text-slate-300">
+              The Portfolio Website of The
             </span>
             <span className="text-cyan-400 font-mono text-xs">✦</span>
           </div>
 
-          {/* Giant Animated Rotating Title with Distinct Futuristic Cyber Display Font (Orbitron / Syne) */}
+          {/* Giant Animated Rotating Title (Classy Modern Heading Font) */}
           <div className="h-20 sm:h-28 md:h-32 flex items-center justify-center relative">
             <AnimatePresence mode="wait">
               <motion.div
                 key={safeIndex}
-                initial={{ y: 25, opacity: 0, filter: 'blur(8px)', scale: 0.96 }}
+                initial={{ y: 22, opacity: 0, filter: 'blur(6px)', scale: 0.96 }}
                 animate={{ y: 0, opacity: 1, filter: 'blur(0px)', scale: 1 }}
-                exit={{ y: -25, opacity: 0, filter: 'blur(8px)', scale: 0.96 }}
+                exit={{ y: -22, opacity: 0, filter: 'blur(6px)', scale: 0.96 }}
                 transition={{ duration: 0.45, ease: [0.22, 1, 0.36, 1] }}
                 className="relative"
               >
-                <h3 className={`text-3xl sm:text-5xl md:text-6xl lg:text-7xl font-black font-role tracking-wider uppercase bg-clip-text text-transparent bg-gradient-to-r ${theme.primaryGradient} select-none drop-shadow-[0_0_35px_rgba(6,182,212,0.35)]`}>
+                <h3 className={`text-4xl sm:text-6xl md:text-7xl lg:text-8xl font-black font-heading tracking-tight uppercase bg-clip-text text-transparent bg-gradient-to-r ${theme.primaryGradient} select-none drop-shadow-[0_0_35px_rgba(6,182,212,0.35)]`}>
                   {rolesList[safeIndex]}
                 </h3>
               </motion.div>
             </AnimatePresence>
           </div>
 
+          {/* Bottom Line: Name & Engineering Discipline */}
+          <div className="pt-1 flex items-center justify-center gap-2 text-sm sm:text-base text-slate-300">
+            <span className="text-white font-heading font-bold text-base sm:text-lg tracking-wide">
+              {profileData?.name || 'Amit Chauhan'}
+            </span>
+            <span className="text-slate-600 font-mono text-xs">|</span>
+            <span className={`font-tech text-xs sm:text-sm font-semibold uppercase tracking-wider ${theme.accentText}`}>
+              Computer Engineering
+            </span>
+          </div>
+
           {/* Subtle pill indicator dots showing cycling progress */}
           {rolesList.length > 1 && (
-            <div className="flex items-center justify-center gap-2 mt-3">
+            <div className="flex items-center justify-center gap-2 pt-3">
               {rolesList.map((_, idx) => (
                 <button
                   key={idx}
