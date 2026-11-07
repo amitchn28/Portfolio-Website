@@ -275,7 +275,14 @@ export const Layout: React.FC<LayoutProps> = ({ activeTab, onTabChange, children
               <div className="relative group shrink-0">
                 <div className="w-8 h-8 rounded-full overflow-hidden border border-amber-400/60 bg-space-950 flex items-center justify-center text-amber-300 font-bold text-xs shadow-sm shadow-amber-500/20">
                   {avatarUrl ? (
-                    <img src={avatarUrl} alt="Amit Chauhan" className="w-full h-full object-cover" />
+                    <img
+                      src={avatarUrl}
+                      alt="Amit Chauhan"
+                      onError={(e) => {
+                        (e.currentTarget as HTMLImageElement).src = '/avatar.webp';
+                      }}
+                      className="w-full h-full object-cover"
+                    />
                   ) : (
                     <span>{user?.name ? user.name[0].toUpperCase() : 'A'}</span>
                   )}

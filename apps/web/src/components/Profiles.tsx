@@ -20,7 +20,7 @@ export const Profiles: React.FC<ProfilesProps> = ({ profileData, socialsList }) 
     'https://github.com/amitchn28';
 
   const rawAvatar = profileData?.avatarUrl;
-  const avatarUrl = getAssetUrl(rawAvatar) || null;
+  const avatarUrl = getAssetUrl(rawAvatar) || '/avatar.webp';
 
   return (
     <section id="profiles" className="py-20 px-4 sm:px-6 max-w-4xl mx-auto relative text-center scroll-mt-28">
@@ -38,15 +38,14 @@ export const Profiles: React.FC<ProfilesProps> = ({ profileData, socialsList }) 
           
           {/* Avatar Container */}
           <div className="relative w-20 h-20 sm:w-24 sm:h-24 rounded-full overflow-hidden border-2 border-white/20 bg-space-900 flex items-center justify-center text-white shadow-xl">
-            {avatarUrl ? (
-              <img
-                src={avatarUrl}
-                alt={profileData?.name || 'Amit Chauhan'}
-                className="w-full h-full object-cover rounded-full"
-              />
-            ) : (
-              <span className="font-pixel font-bold text-xl sm:text-2xl text-cyan-300">AC</span>
-            )}
+            <img
+              src={avatarUrl}
+              alt={profileData?.name || 'Amit Chauhan'}
+              onError={(e) => {
+                (e.currentTarget as HTMLImageElement).src = '/avatar.webp';
+              }}
+              className="w-full h-full object-cover rounded-full"
+            />
           </div>
         </div>
       </motion.div>

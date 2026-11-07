@@ -181,7 +181,7 @@ export const ProfileView: React.FC = () => {
                     alt="Profile Avatar Preview"
                     className="w-full h-full object-cover rounded-full"
                     onError={(e) => {
-                      (e.target as HTMLElement).style.display = 'none';
+                      (e.currentTarget as HTMLImageElement).src = '/avatar.webp';
                     }}
                   />
                 ) : (

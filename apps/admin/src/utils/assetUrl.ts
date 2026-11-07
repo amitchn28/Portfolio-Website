@@ -1,5 +1,11 @@
 export const getAssetUrl = (url?: string | null): string => {
-  if (!url) return '';
+  if (!url) return '/avatar.webp';
+
+  // If pointing to the old ephemeral upload that was wiped on Render, map to persistent CDN avatar
+  if (url.includes('0c9c060d-eb50-4921-a6d8-040dfab5d84d.webp')) {
+    return '/avatar.webp';
+  }
+
   const backendBase = (
     import.meta.env.VITE_ADMIN_API_URL ||
     import.meta.env.VITE_API_URL ||
@@ -11,9 +17,14 @@ export const getAssetUrl = (url?: string | null): string => {
     return url.replace('http://localhost:5000', backendBase);
   }
 
-  // If URL is a relative path like /uploads/...
-  if (url.startsWith('/')) {
+  // Only uploads starting with /uploads/ belong to backend disk
+  if (url.startsWith('/uploads/')) {
     return `${backendBase}${url}`;
+  }
+
+  // Frontend public static assets like /avatar.webp are served by Vercel
+  if (url.startsWith('/')) {
+    return url;
   }
 
   return url;
