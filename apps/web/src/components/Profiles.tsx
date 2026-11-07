@@ -18,11 +18,12 @@ export const Profiles: React.FC<ProfilesProps> = ({ profileData, socialsList }) 
     socialsList?.find(s => s.platform?.toLowerCase() === 'github')?.url ||
     'https://github.com/amitchn28';
 
+  const backendOrigin = (import.meta.env.VITE_API_URL || 'http://localhost:5000/api').replace(/\/api\/?$/, '');
   const rawAvatar = profileData?.avatarUrl;
   const avatarUrl = rawAvatar
     ? rawAvatar.startsWith('http')
       ? rawAvatar
-      : `http://localhost:5000${rawAvatar.startsWith('/') ? '' : '/'}${rawAvatar}`
+      : `${backendOrigin}${rawAvatar.startsWith('/') ? '' : '/'}${rawAvatar}`
     : null;
 
   return (

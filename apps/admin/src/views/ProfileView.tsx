@@ -93,9 +93,10 @@ export const ProfileView: React.FC = () => {
     try {
       const res = await adminApi.uploadFile(croppedFile, 'profile');
       if (res?.url) {
+        const apiBase = (import.meta.env.VITE_ADMIN_API_URL || import.meta.env.VITE_API_URL || 'http://localhost:5000/api').replace(/\/api\/?$/, '');
         const fullUrl = res.url.startsWith('http')
           ? res.url
-          : `http://localhost:5000${res.url}`;
+          : `${apiBase}${res.url.startsWith('/') ? '' : '/'}${res.url}`;
         setFormData((prev) => ({ ...prev, avatarUrl: fullUrl }));
         success('Adjusted photo uploaded! Click "Save Profile Changes" below to save.');
         setIsCropperOpen(false);

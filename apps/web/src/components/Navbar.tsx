@@ -1,6 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
-import { Menu, X, Sparkles } from 'lucide-react';
+import { motion } from 'framer-motion';
 import { useTheme } from '../context/ThemeContext';
 
 interface NavItem {
@@ -22,8 +21,19 @@ export const Navbar: React.FC = () => {
   const { theme } = useTheme();
   const [activeSection, setActiveSection] = useState('home');
   const [isScrolled, setIsScrolled] = useState(false);
-  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const isClickScrolling = useRef(false);
+  const itemRefs = useRef<Record<string, HTMLButtonElement | null>>({});
+
+  // Auto-scroll the active tab into view on mobile when user scrolls sections
+  useEffect(() => {
+    if (activeSection && itemRefs.current[activeSection]) {
+      itemRefs.current[activeSection]?.scrollIntoView({
+        behavior: 'smooth',
+        inline: 'center',
+        block: 'nearest',
+      });
+    }
+  }, [activeSection]);
 
   useEffect(() => {
     let ticking = false;
@@ -80,7 +90,6 @@ export const Navbar: React.FC = () => {
   }, []);
 
   const scrollToSection = (id: string) => {
-    setMobileMenuOpen(false);
     setActiveSection(id);
     isClickScrolling.current = true;
 
@@ -104,30 +113,22 @@ export const Navbar: React.FC = () => {
         }`}
       />
 
-      <div className="relative flex justify-center p-3 sm:p-5 pointer-events-auto">
+      <div className="relative flex justify-center p-2.5 sm:p-5 pointer-events-auto">
         <nav
-          className="nav-pill rounded-full px-4 sm:px-6 py-2 flex items-center justify-between sm:justify-center gap-1 sm:gap-2 transition-all duration-300 shadow-2xl"
+          className="nav-pill rounded-full px-2 sm:px-6 py-1.5 sm:py-2 flex items-center justify-center max-w-[96vw] sm:max-w-none transition-all duration-300 shadow-2xl"
         >
-          {/* Mobile Brand / Toggle */}
-          <div className="flex sm:hidden items-center gap-2">
-            <span
-              className="w-2.5 h-2.5 rounded-full animate-pulse"
-              style={{ backgroundColor: theme.cursorColor }}
-            />
-            <span className={`text-xs font-semibold tracking-wider font-cyber ${theme.accentText}`}>
-              AMIT CHAUHAN
-            </span>
-          </div>
-
-          {/* Desktop Nav Items with Silky Spring Gliding Tile */}
-          <div className="hidden sm:flex items-center gap-1 relative">
+          {/* Silky Gliding Interactive Tabs for both Mobile & Desktop */}
+          <div className="flex items-center gap-1 sm:gap-1.5 relative overflow-x-auto no-scrollbar scroll-smooth py-0.5 px-1 max-w-full">
             {NAV_ITEMS.map((item) => {
               const isActive = activeSection === item.id;
               return (
                 <button
                   key={item.id}
+                  ref={(el) => {
+                    itemRefs.current[item.id] = el;
+                  }}
                   onClick={() => scrollToSection(item.id)}
-                  className={`relative px-4 py-1.5 rounded-full text-xs font-medium transition-colors duration-200 z-10 ${
+                  className={`relative px-2.5 sm:px-4 py-1 sm:py-1.5 rounded-full text-[11px] sm:text-xs font-medium whitespace-nowrap transition-colors duration-200 z-10 ${
                     isActive
                       ? 'text-white font-semibold'
                       : 'text-slate-400 hover:text-slate-200 hover:bg-slate-800/30'
@@ -155,50 +156,8 @@ export const Navbar: React.FC = () => {
               );
             })}
           </div>
-
-          {/* Mobile Menu Button */}
-          <button
-            onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-            className="sm:hidden p-1.5 rounded-full text-slate-300 hover:text-white bg-slate-800/60 border border-slate-700/50 focus:outline-none"
-            aria-label="Toggle Navigation"
-          >
-            {mobileMenuOpen ? <X className="w-4 h-4" /> : <Menu className="w-4 h-4" />}
-          </button>
         </nav>
       </div>
-
-      {/* Mobile Dropdown Menu */}
-      <AnimatePresence>
-        {mobileMenuOpen && (
-          <motion.div
-            initial={{ opacity: 0, y: -10, scale: 0.95 }}
-            animate={{ opacity: 1, y: 0, scale: 1 }}
-            exit={{ opacity: 0, y: -10, scale: 0.95 }}
-            transition={{ duration: 0.2 }}
-            className="sm:hidden fixed inset-x-4 top-20 bg-space-900/95 backdrop-blur-xl border border-cyan-500/30 rounded-2xl p-5 shadow-2xl z-50 flex flex-col gap-2 pointer-events-auto"
-          >
-            <div className="flex items-center justify-between pb-3 border-b border-slate-800">
-              <span className="text-xs font-mono text-cyan-400 flex items-center gap-1.5">
-                <Sparkles className="w-3.5 h-3.5" /> Navigation
-              </span>
-              <span className="text-[10px] text-slate-500 font-mono">Portfolio</span>
-            </div>
-            {NAV_ITEMS.map((item) => (
-              <button
-                key={item.id}
-                onClick={() => scrollToSection(item.id)}
-                className={`text-left px-3 py-2.5 rounded-lg text-sm transition-colors ${
-                  activeSection === item.id
-                    ? 'bg-cyan-500/20 text-cyan-300 font-semibold border-l-2 border-cyan-400'
-                    : 'text-slate-300 hover:bg-slate-800/60'
-                }`}
-              >
-                {item.label}
-              </button>
-            ))}
-          </motion.div>
-        )}
-      </AnimatePresence>
     </header>
   );
 };

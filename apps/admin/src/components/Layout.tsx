@@ -85,9 +85,10 @@ export const Layout: React.FC<LayoutProps> = ({ activeTab, onTabChange, children
       try {
         const prof = await adminApi.getProfile();
         if (prof?.avatarUrl) {
+          const apiBase = (import.meta.env.VITE_ADMIN_API_URL || import.meta.env.VITE_API_URL || 'http://localhost:5000/api').replace(/\/api\/?$/, '');
           const fullUrl = prof.avatarUrl.startsWith('http')
             ? prof.avatarUrl
-            : `http://localhost:5000${prof.avatarUrl.startsWith('/') ? '' : '/'}${prof.avatarUrl}`;
+            : `${apiBase}${prof.avatarUrl.startsWith('/') ? '' : '/'}${prof.avatarUrl}`;
           setAvatarUrl(fullUrl);
         }
       } catch {

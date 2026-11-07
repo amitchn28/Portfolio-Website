@@ -23,11 +23,12 @@ export const Hero: React.FC<HeroProps> = ({ profileData, onOpenResume }) => {
     if (el) el.scrollIntoView({ behavior: 'smooth' });
   };
 
+  const backendOrigin = (import.meta.env.VITE_API_URL || 'http://localhost:5000/api').replace(/\/api\/?$/, '');
   const rawAvatar = profileData?.avatarUrl;
   const avatarUrl = rawAvatar
     ? rawAvatar.startsWith('http')
       ? rawAvatar
-      : `http://localhost:5000${rawAvatar.startsWith('/') ? '' : '/'}${rawAvatar}`
+      : `${backendOrigin}${rawAvatar.startsWith('/') ? '' : '/'}${rawAvatar}`
     : null;
 
   return (

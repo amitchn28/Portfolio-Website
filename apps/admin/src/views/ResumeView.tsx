@@ -60,24 +60,8 @@ export const ResumeView: React.FC = () => {
 
     setUploading(true);
     try {
-      // Create FormData to upload to /api/uploads
-      const formData = new FormData();
-      formData.append('file', file);
-      formData.append('category', 'resume');
-
-      const token = localStorage.getItem('amit_admin_token');
-      const res = await fetch('http://localhost:5000/api/uploads', {
-        method: 'POST',
-        headers: token ? { Authorization: `Bearer ${token}` } : {},
-        body: formData,
-      });
-
-      const json = await res.json();
-      if (!res.ok || !json.success) {
-        throw new Error(json.message || 'Upload failed');
-      }
-
-      const uploadedUrl = json.data?.url || json.url;
+      const uploaded = await adminApi.uploadFile(file, 'resume');
+      const uploadedUrl = uploaded?.url;
       setForm((prev) => ({ ...prev, fileUrl: uploadedUrl }));
       success('File uploaded to storage! Click "Save Resume Record" below to activate it.');
     } catch (err: any) {
