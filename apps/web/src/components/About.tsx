@@ -12,7 +12,7 @@ interface AboutProps {
   profileData?: any;
 }
 
-const DEFAULT_ROLES = ['PROGRAMMER', 'GAMER', 'CODER'];
+const DEFAULT_ROLES = ['DEVELOPER', 'PROGRAMMER', 'GAMER', 'CODER'];
 
 export const About: React.FC<AboutProps> = ({ profileData }) => {
   const { theme } = useTheme();
@@ -138,18 +138,18 @@ export const About: React.FC<AboutProps> = ({ profileData }) => {
           </div>
         </div>
 
-        {/* Large Classy Rotating Statement (Programmer -> Gamer -> Coder) Positioned at Bottom */}
+        {/* Large Classy Rotating Statement (Developer -> Programmer -> Gamer -> Coder) Positioned at Bottom */}
         <div className="mt-12 pt-10 border-t border-slate-800/80 text-center relative overflow-hidden">
-          {/* Subtle Lead-in Label */}
-          <div className="inline-flex items-center gap-2 mb-2">
-            <span className="w-1.5 h-1.5 rounded-full bg-cyan-400 animate-pulse" />
-            <span className="font-tech text-xs sm:text-sm font-semibold tracking-widest uppercase text-slate-400">
-              Driven by Passion as a
+          {/* Ultra-Minimal Lead-in Label */}
+          <div className="inline-flex items-center gap-2 mb-2 text-center">
+            <span className="text-cyan-400 font-mono text-xs">✦</span>
+            <span className="font-mono text-[11px] sm:text-xs font-semibold tracking-[0.3em] uppercase text-slate-400">
+              THE
             </span>
-            <span className="w-1.5 h-1.5 rounded-full bg-cyan-400 animate-pulse" />
+            <span className="text-cyan-400 font-mono text-xs">✦</span>
           </div>
 
-          {/* Giant Animated Rotating Title matching website aesthetic */}
+          {/* Giant Animated Rotating Title with Distinct Futuristic Cyber Display Font (Orbitron / Syne) */}
           <div className="h-20 sm:h-28 md:h-32 flex items-center justify-center relative">
             <AnimatePresence mode="wait">
               <motion.div
@@ -160,7 +160,7 @@ export const About: React.FC<AboutProps> = ({ profileData }) => {
                 transition={{ duration: 0.45, ease: [0.22, 1, 0.36, 1] }}
                 className="relative"
               >
-                <h3 className={`text-4xl sm:text-6xl md:text-7xl lg:text-8xl font-black font-heading tracking-tight uppercase bg-clip-text text-transparent bg-gradient-to-r ${theme.primaryGradient} select-none drop-shadow-[0_0_35px_rgba(6,182,212,0.35)]`}>
+                <h3 className={`text-3xl sm:text-5xl md:text-6xl lg:text-7xl font-black font-role tracking-wider uppercase bg-clip-text text-transparent bg-gradient-to-r ${theme.primaryGradient} select-none drop-shadow-[0_0_35px_rgba(6,182,212,0.35)]`}>
                   {rolesList[safeIndex]}
                 </h3>
               </motion.div>

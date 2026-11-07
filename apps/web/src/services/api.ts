@@ -5,7 +5,7 @@ export const FALLBACK_PROFILE = {
   name: 'Amit Chauhan',
   headline: 'Software Engineer & AI Developer',
   tagline: 'Building intelligent systems, scalable full-stack web applications, and hybrid AI solutions.',
-  shortBio: 'Programmer, Gamer, Coder',
+  shortBio: 'Developer, Programmer, Gamer, Coder',
   fullBio: `I am someone who thrives on learning, problem-solving, and continuous growth. My personality blends curiosity, adaptability, and persistence, which helps me approach challenges with optimism and clarity. I value collaboration and clear communication, but I am equally comfortable taking initiative and working independently.
 
 At my core, I am driven by a desire to make an impact, stay open to new perspectives, and keep evolving both personally and professionally.`,

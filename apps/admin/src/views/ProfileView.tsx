@@ -38,7 +38,7 @@ export const ProfileView: React.FC = () => {
             name: data.name || 'Amit Chauhan',
             headline: data.headline || 'Software Engineer & AI Developer',
             tagline: data.tagline || 'Building intelligent systems, scalable full-stack web applications, and hybrid AI solutions.',
-            shortBio: (data.shortBio && data.shortBio.length < 80) ? data.shortBio : 'Programmer, Gamer, Coder',
+            shortBio: (data.shortBio && data.shortBio.length < 80) ? data.shortBio : 'Developer, Programmer, Gamer, Coder',
             fullBio: data.fullBio || '',
             avatarUrl: data.avatarUrl || '',
             location: data.location || 'Mumbai, India',
@@ -366,7 +366,7 @@ export const ProfileView: React.FC = () => {
             </div>
             <input
               type="text"
-              placeholder="Programmer, Gamer, Coder"
+              placeholder="Developer, Programmer, Gamer, Coder"
               value={formData.shortBio}
               onChange={(e) => setFormData({ ...formData, shortBio: e.target.value })}
               className="w-full px-4 py-3 rounded-xl bg-space-900 border border-slate-700/80 focus:border-amber-400 focus:ring-1 focus:ring-amber-400 text-sm font-tech text-white focus:outline-none tracking-wide"
@@ -377,7 +377,7 @@ export const ProfileView: React.FC = () => {
             {/* Live Role Badges Preview */}
             <div className="flex flex-wrap items-center gap-2 pt-1">
               <span className="text-[10px] font-mono text-slate-400">Live Preview:</span>
-              {(formData.shortBio || 'Programmer, Gamer, Coder')
+              {(formData.shortBio || 'Developer, Programmer, Gamer, Coder')
                 .split(/[,•|/]/)
                 .map((r) => r.trim())
                 .filter(Boolean)

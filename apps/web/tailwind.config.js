@@ -31,6 +31,7 @@ export default {
         tech: ['Space Grotesk', 'sans-serif'],
         cyber: ['Space Grotesk', 'sans-serif'],
         pixel: ['Space Grotesk', 'JetBrains Mono', 'sans-serif'],
+        role: ['Orbitron', 'Syne', 'Space Grotesk', 'sans-serif'],
         handwriting: ['Caveat', 'cursive'],
         mono: ['JetBrains Mono', 'Fira Code', 'monospace'],
       },

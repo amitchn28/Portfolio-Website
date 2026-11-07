@@ -23,7 +23,7 @@ export const AboutView: React.FC = () => {
         if (data) {
           setAboutData({
             fullBio: data.fullBio || '',
-            shortBio: (data.shortBio && data.shortBio.length < 80) ? data.shortBio : 'Programmer, Gamer, Coder',
+            shortBio: (data.shortBio && data.shortBio.length < 80) ? data.shortBio : 'Developer, Programmer, Gamer, Coder',
             headline: data.headline || '',
             tagline: data.tagline || '',
           });
@@ -139,7 +139,7 @@ export const AboutView: React.FC = () => {
             </div>
             <input
               type="text"
-              placeholder="Programmer, Gamer, Coder"
+              placeholder="Developer, Programmer, Gamer, Coder"
               value={aboutData.shortBio}
               onChange={(e) => setAboutData({ ...aboutData, shortBio: e.target.value })}
               className="w-full px-4 py-3 rounded-xl bg-space-900 border border-slate-700/80 focus:border-amber-400 focus:ring-1 focus:ring-amber-400 text-sm font-tech text-white focus:outline-none tracking-wide"
@@ -150,7 +150,7 @@ export const AboutView: React.FC = () => {
             {/* Live Role Badges Preview */}
             <div className="flex flex-wrap items-center gap-2 pt-1">
               <span className="text-[10px] font-mono text-slate-400">Live Preview:</span>
-              {(aboutData.shortBio || 'Programmer, Gamer, Coder')
+              {(aboutData.shortBio || 'Developer, Programmer, Gamer, Coder')
                 .split(/[,•|/]/)
                 .map((r) => r.trim())
                 .filter(Boolean)
