@@ -9,23 +9,40 @@ import {
 } from 'lucide-react';
 
 interface AboutProps {
-  profileData: any;
+  profileData?: any;
 }
 
-const ROLES = ['Programmer', 'Gamer', 'Coder'];
+const DEFAULT_ROLES = ['PROGRAMMER', 'GAMER', 'CODER'];
 
 export const About: React.FC<AboutProps> = ({ profileData }) => {
   const { theme } = useTheme();
   const bio = profileData?.fullBio;
+  const rawRoles = profileData?.shortBio;
+
+  // Extract roles from admin-configured shortBio (comma/slash/bullet separated)
+  const rolesList: string[] = React.useMemo(() => {
+    if (typeof rawRoles === 'string' && rawRoles.trim().length > 0) {
+      // If it's a long paragraph without commas (legacy bio), fallback to defaults
+      const items = rawRoles.split(/[,•|/]/).map((r) => r.trim()).filter(Boolean);
+      if (items.length > 0 && !(items.length === 1 && items[0].length > 40)) {
+        return items.map((item) => item.toUpperCase());
+      }
+    }
+    return DEFAULT_ROLES;
+  }, [rawRoles]);
+
   const [roleIndex, setRoleIndex] = useState(0);
 
-  // Smoothly rotate between Programmer -> Gamer -> Coder
+  // Smoothly rotate between configured roles
   useEffect(() => {
+    if (rolesList.length <= 1) return;
     const timer = setInterval(() => {
-      setRoleIndex((prev) => (prev + 1) % ROLES.length);
-    }, 2500);
+      setRoleIndex((prev) => (prev + 1) % rolesList.length);
+    }, 2800);
     return () => clearInterval(timer);
-  }, []);
+  }, [rolesList.length]);
+
+  const safeIndex = roleIndex % rolesList.length;
 
   return (
     <section id="about" className="py-20 px-4 sm:px-6 max-w-5xl mx-auto relative scroll-mt-28">
@@ -35,7 +52,7 @@ export const About: React.FC<AboutProps> = ({ profileData }) => {
         whileInView={{ opacity: 1, y: 0 }}
         viewport={{ once: true }}
         transition={{ duration: 0.6 }}
-        className="text-center mb-6"
+        className="text-center mb-10"
       >
         <div className={`inline-flex items-center gap-2 px-3 py-1 rounded-full ${theme.badgeBg} border ${theme.badgeBorder} mb-3`}>
           <span className="w-1.5 h-1.5 rounded-full bg-current animate-pulse"></span>
@@ -47,33 +64,6 @@ export const About: React.FC<AboutProps> = ({ profileData }) => {
           About Me — <span className={`bg-clip-text text-transparent bg-gradient-to-r ${theme.primaryGradient}`}>Behind The Code</span>
         </h2>
         <div className={`h-0.5 w-16 bg-gradient-to-r ${theme.cardTopLine} rounded-full mx-auto mt-3`}></div>
-      </motion.div>
-
-      {/* Unique Dynamic Handwritten Role Ribbon (Programmer -> Gamer -> Coder) */}
-      <motion.div
-        initial={{ opacity: 0, scale: 0.95 }}
-        whileInView={{ opacity: 1, scale: 1 }}
-        viewport={{ once: true }}
-        transition={{ duration: 0.6 }}
-        className="flex items-center justify-center gap-3 mb-12 text-center"
-      >
-        <span className="text-xs sm:text-sm font-tech text-slate-400 uppercase tracking-widest font-medium">
-          Driven by passion as a
-        </span>
-        <div className="relative inline-flex items-center justify-center min-w-[140px] sm:min-w-[170px] h-10 sm:h-12 px-4 py-1 rounded-2xl bg-slate-900/90 border border-amber-500/35 backdrop-blur-xl shadow-xl shadow-amber-500/10">
-          <AnimatePresence mode="wait">
-            <motion.span
-              key={roleIndex}
-              initial={{ y: 14, opacity: 0, rotate: -4, scale: 0.9 }}
-              animate={{ y: 0, opacity: 1, rotate: 0, scale: 1 }}
-              exit={{ y: -14, opacity: 0, rotate: 4, scale: 0.9 }}
-              transition={{ duration: 0.35, ease: 'easeOut' }}
-              className="font-handwriting text-2xl sm:text-3xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-amber-400 via-orange-400 to-amber-300 drop-shadow-[0_0_12px_rgba(245,158,11,0.5)] select-none"
-            >
-              {ROLES[roleIndex]}
-            </motion.span>
-          </AnimatePresence>
-        </div>
       </motion.div>
 
       {/* Main About Card with Glowing Border Line */}
@@ -146,6 +136,54 @@ export const About: React.FC<AboutProps> = ({ profileData }) => {
               <div className="text-xs font-semibold text-emerald-300">AI &bull; Deep Learning</div>
             </div>
           </div>
+        </div>
+
+        {/* Large Classy Rotating Statement (Programmer -> Gamer -> Coder) Positioned at Bottom */}
+        <div className="mt-12 pt-10 border-t border-slate-800/80 text-center relative overflow-hidden">
+          {/* Subtle Lead-in Label */}
+          <div className="inline-flex items-center gap-2 mb-2">
+            <span className="w-1.5 h-1.5 rounded-full bg-cyan-400 animate-pulse" />
+            <span className="font-tech text-xs sm:text-sm font-semibold tracking-widest uppercase text-slate-400">
+              Driven by Passion as a
+            </span>
+            <span className="w-1.5 h-1.5 rounded-full bg-cyan-400 animate-pulse" />
+          </div>
+
+          {/* Giant Animated Rotating Title matching website aesthetic */}
+          <div className="h-20 sm:h-28 md:h-32 flex items-center justify-center relative">
+            <AnimatePresence mode="wait">
+              <motion.div
+                key={safeIndex}
+                initial={{ y: 25, opacity: 0, filter: 'blur(8px)', scale: 0.96 }}
+                animate={{ y: 0, opacity: 1, filter: 'blur(0px)', scale: 1 }}
+                exit={{ y: -25, opacity: 0, filter: 'blur(8px)', scale: 0.96 }}
+                transition={{ duration: 0.45, ease: [0.22, 1, 0.36, 1] }}
+                className="relative"
+              >
+                <h3 className={`text-4xl sm:text-6xl md:text-7xl lg:text-8xl font-black font-heading tracking-tight uppercase bg-clip-text text-transparent bg-gradient-to-r ${theme.primaryGradient} select-none drop-shadow-[0_0_35px_rgba(6,182,212,0.35)]`}>
+                  {rolesList[safeIndex]}
+                </h3>
+              </motion.div>
+            </AnimatePresence>
+          </div>
+
+          {/* Subtle pill indicator dots showing cycling progress */}
+          {rolesList.length > 1 && (
+            <div className="flex items-center justify-center gap-2 mt-3">
+              {rolesList.map((_, idx) => (
+                <button
+                  key={idx}
+                  onClick={() => setRoleIndex(idx)}
+                  className={`h-1.5 rounded-full transition-all duration-300 ${
+                    idx === safeIndex 
+                      ? 'w-7 bg-cyan-400 shadow-[0_0_8px_rgba(6,182,212,0.8)]' 
+                      : 'w-2 bg-slate-700 hover:bg-slate-500'
+                  }`}
+                  aria-label={`Jump to role ${idx + 1}`}
+                />
+              ))}
+            </div>
+          )}
         </div>
       </motion.div>
     </section>

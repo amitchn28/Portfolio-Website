@@ -23,7 +23,7 @@ export const AboutView: React.FC = () => {
         if (data) {
           setAboutData({
             fullBio: data.fullBio || '',
-            shortBio: data.shortBio || '',
+            shortBio: (data.shortBio && data.shortBio.length < 80) ? data.shortBio : 'Programmer, Gamer, Coder',
             headline: data.headline || '',
             tagline: data.tagline || '',
           });
@@ -127,15 +127,42 @@ export const AboutView: React.FC = () => {
             </p>
           </div>
 
-          {/* Short Bio summary */}
-          <div className="space-y-1.5">
-            <label className="text-xs font-mono text-slate-300 font-medium">Quick Summary Snippet</label>
-            <textarea
-              rows={3}
+          {/* Rotating Roles / Titles (Giant Typography at Bottom of About) */}
+          <div className="space-y-2 p-5 rounded-2xl bg-space-950/90 border border-amber-500/30 shadow-md">
+            <div className="flex items-center justify-between">
+              <label className="text-xs font-mono text-amber-300 font-bold flex items-center gap-2">
+                <span>✦ Rotating Roles / Titles (Giant Animated Typography)</span>
+              </label>
+              <span className="text-[10px] font-mono text-amber-400 bg-amber-500/10 px-2 py-0.5 rounded border border-amber-500/25">
+                Comma-separated
+              </span>
+            </div>
+            <input
+              type="text"
+              placeholder="Programmer, Gamer, Coder"
               value={aboutData.shortBio}
               onChange={(e) => setAboutData({ ...aboutData, shortBio: e.target.value })}
-              className="w-full px-4 py-2.5 rounded-xl bg-space-950 border border-slate-800 focus:border-purple-500 text-sm text-white focus:outline-none resize-none"
+              className="w-full px-4 py-3 rounded-xl bg-space-900 border border-slate-700/80 focus:border-amber-400 focus:ring-1 focus:ring-amber-400 text-sm font-tech text-white focus:outline-none tracking-wide"
             />
+            <p className="text-[11px] text-slate-400">
+              These cycle continuously in giant, classy display typography at the bottom of the About section (below the 4 highlight cards). Separate each role with a comma.
+            </p>
+            {/* Live Role Badges Preview */}
+            <div className="flex flex-wrap items-center gap-2 pt-1">
+              <span className="text-[10px] font-mono text-slate-400">Live Preview:</span>
+              {(aboutData.shortBio || 'Programmer, Gamer, Coder')
+                .split(/[,•|/]/)
+                .map((r) => r.trim())
+                .filter(Boolean)
+                .map((role, idx) => (
+                  <span
+                    key={idx}
+                    className="px-2.5 py-0.5 rounded-full text-[11px] font-tech font-bold uppercase tracking-wider bg-gradient-to-r from-cyan-500/20 to-teal-500/20 text-cyan-300 border border-cyan-500/30"
+                  >
+                    {role}
+                  </span>
+                ))}
+            </div>
           </div>
         </div>
 
