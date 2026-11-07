@@ -184,32 +184,91 @@ export const THEMES: Record<string, ThemeConfig> = {
 interface ThemeContextType {
   theme: ThemeConfig;
   setThemeById: (id: string) => void;
+  fontMode: 'modern' | 'pixel';
+  setFontMode: (mode: 'modern' | 'pixel') => void;
   siteSettings: any;
   refreshSettings: () => Promise<void>;
 }
 
+const getInitialTheme = (): string => {
+  try {
+    const cached = localStorage.getItem('amit_site_theme');
+    if (cached && THEMES[cached]) return cached;
+  } catch {}
+  return 'sapphire-glow'; // Matches active production theme to eliminate initial flicker
+};
+
+const getInitialFontMode = (): 'modern' | 'pixel' => {
+  try {
+    const cached = localStorage.getItem('amit_font_mode');
+    if (cached === 'pixel' || cached === 'modern') return cached;
+  } catch {}
+  return 'modern';
+};
+
 const ThemeContext = createContext<ThemeContextType>({
-  theme: THEMES['mumbai-twilight'],
+  theme: THEMES['sapphire-glow'],
   setThemeById: () => {},
+  fontMode: 'modern',
+  setFontMode: () => {},
   siteSettings: null,
   refreshSettings: async () => {},
 });
 
 export const ThemeProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
-  const [themeId, setThemeId] = useState<string>('mumbai-twilight');
-  const [siteSettings, setSiteSettings] = useState<any>(null);
+  const [themeId, setThemeId] = useState<string>(getInitialTheme);
+  const [fontMode, setFontMode] = useState<'modern' | 'pixel'>(getInitialFontMode);
+  const [siteSettings, setSiteSettings] = useState<any>(() => {
+    try {
+      const cached = localStorage.getItem('amit_cached_settings');
+      if (cached) return JSON.parse(cached);
+    } catch {}
+    return null;
+  });
+
+  // Keep document attributes and localStorage in immediate sync
+  useEffect(() => {
+    document.documentElement.setAttribute('data-theme', themeId);
+    document.documentElement.setAttribute('data-font-mode', fontMode);
+    try {
+      localStorage.setItem('amit_site_theme', themeId);
+      localStorage.setItem('amit_font_mode', fontMode);
+    } catch {}
+  }, [themeId, fontMode]);
 
   const refreshSettings = async () => {
     try {
       const data = await portfolioApi.getSettings();
       if (data?.website) {
         setSiteSettings(data.website);
-        if (data.website.theme && THEMES[data.website.theme]) {
-          setThemeId(data.website.theme);
+        try {
+          localStorage.setItem('amit_cached_settings', JSON.stringify(data.website));
+        } catch {}
+
+        const rawTheme = data.website.theme || 'sapphire-glow';
+        let targetTheme = rawTheme;
+        let targetFontMode: 'modern' | 'pixel' = 'modern';
+
+        if (rawTheme.includes('::')) {
+          const parts = rawTheme.split('::');
+          targetTheme = parts[0];
+          targetFontMode = parts[1] === 'pixel' ? 'pixel' : 'modern';
         }
+
+        if (THEMES[targetTheme]) {
+          setThemeId(targetTheme);
+          try {
+            localStorage.setItem('amit_site_theme', targetTheme);
+          } catch {}
+        }
+
+        setFontMode(targetFontMode);
+        try {
+          localStorage.setItem('amit_font_mode', targetFontMode);
+        } catch {}
       }
     } catch {
-      // Fallback
+      // Fallback preserves initial synchronous state
     }
   };
 
@@ -217,14 +276,26 @@ export const ThemeProvider: React.FC<{ children: ReactNode }> = ({ children }) =
     refreshSettings();
   }, []);
 
-  const currentTheme = THEMES[themeId] || THEMES['mumbai-twilight'];
+  const currentTheme = THEMES[themeId] || THEMES['sapphire-glow'];
 
   return (
     <ThemeContext.Provider
       value={{
         theme: currentTheme,
         setThemeById: (id: string) => {
-          if (THEMES[id]) setThemeId(id);
+          if (THEMES[id]) {
+            setThemeId(id);
+            try {
+              localStorage.setItem('amit_site_theme', id);
+            } catch {}
+          }
+        },
+        fontMode,
+        setFontMode: (mode: 'modern' | 'pixel') => {
+          setFontMode(mode);
+          try {
+            localStorage.setItem('amit_font_mode', mode);
+          } catch {}
         },
         siteSettings,
         refreshSettings,

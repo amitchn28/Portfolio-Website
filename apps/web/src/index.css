@@ -72,11 +72,24 @@ body {
     linear-gradient(to bottom, rgba(6, 182, 212, 0.035) 1px, transparent 1px);
 }
 
-/* High-Tech Modern Accent Typography (Normalized from 8-bit pixel) */
-.pixel-text {
-  font-family: 'Space Grotesk', 'JetBrains Mono', monospace;
+/* Dynamic Accent Typography System (Configurable in Admin CMS) */
+/* Mode A: Normalized Modern Tech (Default) */
+.pixel-text,
+.font-pixel,
+.font-tech,
+[data-font-mode="modern"] .pixel-text,
+[data-font-mode="modern"] .font-pixel,
+[data-font-mode="modern"] .font-tech {
+  font-family: 'Space Grotesk', 'JetBrains Mono', sans-serif;
   letter-spacing: 0.05em;
-  font-weight: 600;
+}
+
+/* Mode B: Retro Cyber Pixel (8-Bit Silkscreen retro aesthetic) */
+[data-font-mode="pixel"] .pixel-text,
+[data-font-mode="pixel"] .font-pixel,
+[data-font-mode="pixel"] .font-tech {
+  font-family: 'Silkscreen', monospace !important;
+  letter-spacing: 0.08em !important;
 }
 
 /* Hide scrollbar for Chrome, Safari, Edge, and Firefox */

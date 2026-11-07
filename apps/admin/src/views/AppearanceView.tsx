@@ -8,13 +8,15 @@ export const AppearanceView: React.FC = () => {
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
 
+  const [fontMode, setFontMode] = useState<'modern' | 'pixel'>('modern');
+
   const [form, setForm] = useState({
     siteName: 'Amit Chauhan',
     siteTagline: 'Software Engineer & AI Developer',
     contactEmail: 'amitchn28@gmail.com',
     isMaintenance: false,
     allowMessages: true,
-    theme: 'cyber-dark',
+    theme: 'sapphire-glow',
   });
 
   const loadSettings = async () => {
@@ -22,14 +24,25 @@ export const AppearanceView: React.FC = () => {
     try {
       const data = await adminApi.getAdminSettings();
       if (data?.website) {
+        const rawTheme = data.website.theme || 'sapphire-glow';
+        let activeTheme = rawTheme;
+        let activeFontMode: 'modern' | 'pixel' = 'modern';
+
+        if (rawTheme.includes('::')) {
+          const parts = rawTheme.split('::');
+          activeTheme = parts[0];
+          activeFontMode = parts[1] === 'pixel' ? 'pixel' : 'modern';
+        }
+
         setForm({
           siteName: data.website.siteName || 'Amit Chauhan',
           siteTagline: data.website.siteTagline || 'Software Engineer & AI Developer',
           contactEmail: data.website.contactEmail || 'amitchn28@gmail.com',
           isMaintenance: data.website.isMaintenance || false,
           allowMessages: data.website.allowMessages !== false,
-          theme: data.website.theme || 'cyber-dark',
+          theme: activeTheme,
         });
+        setFontMode(activeFontMode);
       }
     } catch (err: any) {
       error(err.message || 'Failed to load website settings');
@@ -46,8 +59,12 @@ export const AppearanceView: React.FC = () => {
     e.preventDefault();
     setSaving(true);
     try {
-      await adminApi.updateWebsiteSettings(form);
-      success('Website appearance & operational settings updated successfully!');
+      const themePayload = fontMode === 'pixel' ? `${form.theme}::pixel` : form.theme;
+      await adminApi.updateWebsiteSettings({
+        ...form,
+        theme: themePayload,
+      });
+      success('Website appearance & typography preferences updated successfully!');
     } catch (err: any) {
       error(err.message || 'Failed to update website settings');
     } finally {
@@ -309,6 +326,82 @@ export const AppearanceView: React.FC = () => {
                 <p className="text-[11px] text-slate-400 mt-2 font-mono">
                   Refined sleek cyber palette with indigo &amp; cyan highlights.
                 </p>
+              </div>
+            </div>
+          </div>
+
+          {/* Accent Typography Style Switcher (Modern Tech vs Retro Cyber Pixel) */}
+          <div className="p-6 rounded-2xl bg-space-950/90 border border-slate-800 space-y-4">
+            <div className="flex items-center justify-between">
+              <div>
+                <h3 className="text-sm font-bold text-white font-cyber uppercase tracking-wider flex items-center gap-2">
+                  <span>Accent Typography Style</span>
+                  <span className="text-[10px] font-mono px-2 py-0.5 rounded-full bg-purple-500/10 text-purple-300 border border-purple-500/20">
+                    Live Toggle
+                  </span>
+                </h3>
+                <p className="text-xs text-slate-400 mt-1">
+                  Choose whether section badges, role indicators, and cyber labels appear in normalized modern tech font or 8-bit retro pixel font.
+                </p>
+              </div>
+            </div>
+
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-1">
+              {/* Option 1: Modern Tech */}
+              <div
+                onClick={() => setFontMode('modern')}
+                className={`p-4 rounded-xl border cursor-pointer transition-all flex items-start gap-3.5 ${
+                  fontMode === 'modern'
+                    ? 'border-purple-500 bg-space-900 shadow-glow-card ring-1 ring-purple-500/50'
+                    : 'border-slate-800 bg-space-900/40 opacity-60 hover:opacity-100 hover:border-slate-700'
+                }`}
+              >
+                <div className={`w-4 h-4 rounded-full mt-0.5 border flex items-center justify-center shrink-0 ${
+                  fontMode === 'modern' ? 'border-purple-400 bg-purple-500' : 'border-slate-600'
+                }`}>
+                  {fontMode === 'modern' && <div className="w-1.5 h-1.5 rounded-full bg-white" />}
+                </div>
+                <div className="space-y-1">
+                  <div className="text-xs font-bold text-white uppercase tracking-wider">
+                    Normalized Modern Tech (Space Grotesk)
+                  </div>
+                  <p className="text-[11px] text-slate-400 font-sans">
+                    Clean, elegant geometric typography matching modern developer aesthetics.
+                  </p>
+                  <div className="pt-2 text-[11px] text-cyan-300 font-mono font-semibold tracking-wider">
+                    PREVIEW: SOFTWARE ENGINEER // CS STUDENT
+                  </div>
+                </div>
+              </div>
+
+              {/* Option 2: Retro Cyber Pixel */}
+              <div
+                onClick={() => setFontMode('pixel')}
+                className={`p-4 rounded-xl border cursor-pointer transition-all flex items-start gap-3.5 ${
+                  fontMode === 'pixel'
+                    ? 'border-amber-400 bg-space-900 shadow-glow-card ring-1 ring-amber-400/50'
+                    : 'border-slate-800 bg-space-900/40 opacity-60 hover:opacity-100 hover:border-slate-700'
+                }`}
+              >
+                <div className={`w-4 h-4 rounded-full mt-0.5 border flex items-center justify-center shrink-0 ${
+                  fontMode === 'pixel' ? 'border-amber-400 bg-amber-500' : 'border-slate-600'
+                }`}>
+                  {fontMode === 'pixel' && <div className="w-1.5 h-1.5 rounded-full bg-white" />}
+                </div>
+                <div className="space-y-1">
+                  <div className="text-xs font-bold text-amber-300 font-mono uppercase tracking-wider">
+                    Retro Cyber Pixel (Silkscreen 8-Bit)
+                  </div>
+                  <p className="text-[11px] text-slate-400 font-sans">
+                    Nostalgic cyberpunk pixelated lettering for badges and chosen key headers.
+                  </p>
+                  <div 
+                    className="pt-2 text-[11px] text-amber-300 tracking-wider"
+                    style={{ fontFamily: "'Silkscreen', monospace" }}
+                  >
+                    PREVIEW: SOFTWARE ENGINEER // CS STUDENT
+                  </div>
+                </div>
               </div>
             </div>
           </div>
