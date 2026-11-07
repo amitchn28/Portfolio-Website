@@ -1,10 +1,10 @@
 # Production Dockerfile for Amit Chauhan REST API Backend
-FROM node:20-alpine
+FROM node:20-bookworm-slim
 
 WORKDIR /app
 
-# Install openssl for Prisma runtime
-RUN apk add --no-cache openssl
+# Install openssl and build tools for native node addons (argon2, prisma)
+RUN apt-get update -y && apt-get install -y openssl python3 make g++ && rm -rf /var/lib/apt/lists/*
 
 # Copy full monorepo
 COPY . .
