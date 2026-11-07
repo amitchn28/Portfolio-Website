@@ -55,6 +55,10 @@ class HybridEmailService {
     // 1. Try Resend if configured
     if (this.isResendConfigured()) {
       try {
+        // Resend requires verified domain or onboarding@resend.dev for test deliveries
+        const resendFrom = process.env.RESEND_FROM || 
+          (this.from.includes('@resend.dev') ? this.from : 'Amit Chauhan Portfolio <onboarding@resend.dev>');
+
         const res = await fetch('https://api.resend.com/emails', {
           method: 'POST',
           headers: {
@@ -62,7 +66,7 @@ class HybridEmailService {
             'Content-Type': 'application/json',
           },
           body: JSON.stringify({
-            from: this.from,
+            from: resendFrom,
             to: [options.to],
             subject: options.subject,
             html: options.html,
