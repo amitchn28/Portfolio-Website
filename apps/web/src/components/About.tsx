@@ -14,11 +14,43 @@ interface AboutProps {
 
 const DEFAULT_ROLES = ['DEVELOPER', 'PROGRAMMER', 'GAMER', 'CODER'];
 
+interface AboutHighlights {
+  degree: string;
+  college: string;
+  majorDomain: string;
+  specialization: string;
+}
+
+const DEFAULT_HIGHLIGHTS: AboutHighlights = {
+  degree: 'B.E. Computer Eng.',
+  college: 'ARMIET, Mumbai Univ.',
+  majorDomain: 'Full-Stack Development',
+  specialization: 'AI • Deep Learning',
+};
+
 export const About: React.FC<AboutProps> = ({ profileData }) => {
   const { theme } = useTheme();
   const bio = profileData?.fullBio;
   const rawRoles = profileData?.shortBio;
   const rawTagline = profileData?.tagline;
+
+  const highlights = React.useMemo(() => {
+    if (profileData?.bannerUrl) {
+      try {
+        const raw = profileData.bannerUrl;
+        if (typeof raw === 'string' && raw.trim().startsWith('{')) {
+          const parsed = JSON.parse(raw);
+          return {
+            degree: parsed.degree || DEFAULT_HIGHLIGHTS.degree,
+            college: parsed.college || DEFAULT_HIGHLIGHTS.college,
+            majorDomain: parsed.majorDomain || DEFAULT_HIGHLIGHTS.majorDomain,
+            specialization: parsed.specialization || DEFAULT_HIGHLIGHTS.specialization,
+          };
+        }
+      } catch {}
+    }
+    return DEFAULT_HIGHLIGHTS;
+  }, [profileData?.bannerUrl]);
 
   const disciplineText = React.useMemo(() => {
     if (
@@ -100,7 +132,7 @@ export const About: React.FC<AboutProps> = ({ profileData }) => {
           </p>
 
           <p>
-            Currently pursuing my <strong className="text-white font-semibold">B.E. in Computer Engineering at ARMIET, University of Mumbai</strong>, my core engineering focus spans <strong className="text-cyan-300 font-semibold">full-stack software development</strong>, high-throughput backend microservices, modern distributed web systems, and applied machine learning research.
+            Currently pursuing my <strong className="text-white font-semibold">{highlights.degree} at {highlights.college}</strong>, my core engineering focus spans <strong className="text-cyan-300 font-semibold">{highlights.majorDomain}</strong>, high-throughput backend microservices, modern distributed web systems, and applied machine learning research in <strong className="text-emerald-300 font-semibold">{highlights.specialization}</strong>.
           </p>
 
           <p className="text-slate-400 text-xs sm:text-sm italic border-l-2 border-cyan-500/80 pl-4 py-2 bg-cyan-950/20 rounded-r-xl">
@@ -116,7 +148,7 @@ export const About: React.FC<AboutProps> = ({ profileData }) => {
             </div>
             <div>
               <div className="text-[10px] text-slate-500 font-mono uppercase tracking-wider">Degree</div>
-              <div className="text-xs font-semibold text-white">B.E. Computer Eng.</div>
+              <div className="text-xs font-semibold text-white">{highlights.degree}</div>
             </div>
           </div>
 
@@ -126,7 +158,7 @@ export const About: React.FC<AboutProps> = ({ profileData }) => {
             </div>
             <div>
               <div className="text-[10px] text-slate-500 font-mono uppercase tracking-wider">College</div>
-              <div className="text-xs font-semibold text-white">ARMIET, Mumbai Univ.</div>
+              <div className="text-xs font-semibold text-white">{highlights.college}</div>
             </div>
           </div>
 
@@ -136,7 +168,7 @@ export const About: React.FC<AboutProps> = ({ profileData }) => {
             </div>
             <div>
               <div className="text-[10px] text-slate-500 font-mono uppercase tracking-wider">Major Domain</div>
-              <div className="text-xs font-semibold text-sky-300">Full-Stack Development</div>
+              <div className="text-xs font-semibold text-sky-300">{highlights.majorDomain}</div>
             </div>
           </div>
 
@@ -146,7 +178,7 @@ export const About: React.FC<AboutProps> = ({ profileData }) => {
             </div>
             <div>
               <div className="text-[10px] text-slate-500 font-mono uppercase tracking-wider">Specialization</div>
-              <div className="text-xs font-semibold text-emerald-300">AI &bull; Deep Learning</div>
+              <div className="text-xs font-semibold text-emerald-300">{highlights.specialization}</div>
             </div>
           </div>
         </div>

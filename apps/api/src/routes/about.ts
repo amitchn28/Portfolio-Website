@@ -23,6 +23,7 @@ router.get('/', async (_req: Request, res: Response<ApiResponse>) => {
         tagline: profile?.tagline,
         shortBio: profile?.shortBio,
         fullBio: profile?.fullBio,
+        bannerUrl: profile?.bannerUrl,
         location: profile?.location,
         academicStatus: profile?.currentStatus,
         availability: profile?.availability,
@@ -46,7 +47,7 @@ router.get('/', async (_req: Request, res: Response<ApiResponse>) => {
 // PUT /api/about (Admin Only)
 router.put('/', requireAuth, async (req: AuthenticatedRequest, res: Response<ApiResponse>) => {
   try {
-    const { fullBio, shortBio, headline, tagline } = req.body;
+    const { fullBio, shortBio, headline, tagline, bannerUrl } = req.body;
 
     const updated = await prisma.profile.upsert({
       where: { id: 'default' },
@@ -55,14 +56,16 @@ router.put('/', requireAuth, async (req: AuthenticatedRequest, res: Response<Api
         ...(shortBio !== undefined ? { shortBio } : {}),
         ...(headline !== undefined ? { headline } : {}),
         ...(tagline !== undefined ? { tagline } : {}),
+        ...(bannerUrl !== undefined ? { bannerUrl } : {}),
       },
       create: {
         id: 'default',
         name: 'Amit Chauhan',
         headline: headline || 'Software Engineer & AI Developer',
-        tagline: tagline || 'Building intelligent systems, scalable full-stack web applications, and hybrid AI solutions.',
-        shortBio: shortBio || 'CS student passionate about software development.',
+        tagline: tagline || 'Computer Science',
+        shortBio: shortBio || 'Developer, Programmer, Gamer, Coder',
         fullBio: fullBio || 'I am someone who thrives on learning, problem-solving, and continuous growth.',
+        bannerUrl: bannerUrl || null,
         location: 'Mumbai, India',
         email: 'amitchn28@gmail.com',
         currentStatus: 'CS Student • Fourth Year',

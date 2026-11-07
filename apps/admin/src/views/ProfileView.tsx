@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { adminApi } from '../services/api';
 import { useToast } from '../context/ToastContext';
-import { Save, Loader2, Trash2, Camera, User, Crop } from 'lucide-react';
+import { Save, Loader2, Trash2, Camera, User, Crop, GraduationCap, Building, Code2, Cpu } from 'lucide-react';
 import { ImageCropperModal } from '../components/ImageCropperModal';
 import { getAssetUrl } from '../utils/assetUrl';
 
@@ -13,6 +13,13 @@ export const ProfileView: React.FC = () => {
   const [isCropperOpen, setIsCropperOpen] = useState(false);
   const [cropImageSrc, setCropImageSrc] = useState<string>('');
   const fileInputRef = useRef<HTMLInputElement>(null);
+
+  const [highlights, setHighlights] = useState({
+    degree: 'B.E. Computer Eng.',
+    college: 'ARMIET, Mumbai Univ.',
+    majorDomain: 'Full-Stack Development',
+    specialization: 'AI • Deep Learning',
+  });
 
   const [formData, setFormData] = useState({
     name: '',
@@ -48,6 +55,18 @@ export const ProfileView: React.FC = () => {
             currentStatus: data.currentStatus || 'CS Student • Fourth Year',
             yearsOfExperience: data.yearsOfExperience || 0,
           });
+
+          if (data.bannerUrl) {
+            try {
+              const parsed = JSON.parse(data.bannerUrl);
+              setHighlights({
+                degree: parsed.degree || 'B.E. Computer Eng.',
+                college: parsed.college || 'ARMIET, Mumbai Univ.',
+                majorDomain: parsed.majorDomain || 'Full-Stack Development',
+                specialization: parsed.specialization || 'AI • Deep Learning',
+              });
+            } catch {}
+          }
         }
       } catch (err: any) {
         error(err.message || 'Failed to fetch profile');
@@ -127,15 +146,17 @@ export const ProfileView: React.FC = () => {
     e.preventDefault();
     setSaving(true);
     try {
+      const bannerUrl = JSON.stringify(highlights);
       const payload = {
         ...formData,
+        bannerUrl,
         yearsOfExperience: Number(formData.yearsOfExperience) || 0,
       };
       const res = await adminApi.updateProfile(payload);
       if (res) {
         setFormData((prev) => ({ ...prev, ...res }));
       }
-      success('Profile details successfully updated and saved to PostgreSQL!');
+      success('Profile details & 4 highlight metrics successfully updated and saved to PostgreSQL!');
     } catch (err: any) {
       error(err.message || 'Failed to update profile');
     } finally {
@@ -398,6 +419,135 @@ export const ProfileView: React.FC = () => {
                     {role}
                   </span>
                 ))}
+            </div>
+          </div>
+
+          {/* 4 About Highlight Cards (Degree, College, Major Domain, Specialization) */}
+          <div className="p-6 rounded-2xl bg-space-950/90 border border-cyan-500/30 shadow-md space-y-5">
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+              <div>
+                <h3 className="text-sm font-bold text-white font-cyber uppercase tracking-wider flex items-center gap-2">
+                  <span>✦ About Highlight Cards (4 Key Metrics)</span>
+                  <span className="text-[10px] font-mono px-2 py-0.5 rounded-full bg-cyan-500/10 text-cyan-300 border border-cyan-500/20">
+                    Live Public Cards
+                  </span>
+                </h3>
+                <p className="text-xs text-slate-400 mt-1">
+                  Customize the 4 highlight boxes displayed at the bottom of the About card (Degree, College, Major Domain &amp; Specialization).
+                </p>
+              </div>
+            </div>
+
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-1">
+              {/* Degree */}
+              <div className="space-y-1.5 p-3.5 rounded-xl bg-space-900/60 border border-slate-800">
+                <div className="flex items-center gap-2 text-xs font-semibold text-white">
+                  <GraduationCap className="w-4 h-4 text-cyan-400" />
+                  <span>1. Degree Title</span>
+                </div>
+                <input
+                  type="text"
+                  placeholder="B.E. Computer Eng."
+                  value={highlights.degree}
+                  onChange={(e) => setHighlights({ ...highlights, degree: e.target.value })}
+                  className="w-full px-3 py-2 rounded-lg bg-space-950 border border-slate-700/80 focus:border-cyan-400 text-xs text-white focus:outline-none"
+                />
+                <span className="text-[10px] text-slate-500 font-mono">e.g. B.E. Computer Eng.</span>
+              </div>
+
+              {/* College */}
+              <div className="space-y-1.5 p-3.5 rounded-xl bg-space-900/60 border border-slate-800">
+                <div className="flex items-center gap-2 text-xs font-semibold text-white">
+                  <Building className="w-4 h-4 text-teal-400" />
+                  <span>2. College / University</span>
+                </div>
+                <input
+                  type="text"
+                  placeholder="ARMIET, Mumbai Univ."
+                  value={highlights.college}
+                  onChange={(e) => setHighlights({ ...highlights, college: e.target.value })}
+                  className="w-full px-3 py-2 rounded-lg bg-space-950 border border-slate-700/80 focus:border-teal-400 text-xs text-white focus:outline-none"
+                />
+                <span className="text-[10px] text-slate-500 font-mono">e.g. ARMIET, Mumbai Univ.</span>
+              </div>
+
+              {/* Major Domain */}
+              <div className="space-y-1.5 p-3.5 rounded-xl bg-space-900/60 border border-slate-800">
+                <div className="flex items-center gap-2 text-xs font-semibold text-white">
+                  <Code2 className="w-4 h-4 text-sky-400" />
+                  <span>3. Major Domain</span>
+                </div>
+                <input
+                  type="text"
+                  placeholder="Full-Stack Development"
+                  value={highlights.majorDomain}
+                  onChange={(e) => setHighlights({ ...highlights, majorDomain: e.target.value })}
+                  className="w-full px-3 py-2 rounded-lg bg-space-950 border border-slate-700/80 focus:border-sky-400 text-xs text-sky-300 focus:outline-none font-medium"
+                />
+                <span className="text-[10px] text-slate-500 font-mono">e.g. Full-Stack Development</span>
+              </div>
+
+              {/* Specialization */}
+              <div className="space-y-1.5 p-3.5 rounded-xl bg-space-900/60 border border-slate-800">
+                <div className="flex items-center gap-2 text-xs font-semibold text-white">
+                  <Cpu className="w-4 h-4 text-emerald-400" />
+                  <span>4. Specialization</span>
+                </div>
+                <input
+                  type="text"
+                  placeholder="AI • Deep Learning"
+                  value={highlights.specialization}
+                  onChange={(e) => setHighlights({ ...highlights, specialization: e.target.value })}
+                  className="w-full px-3 py-2 rounded-lg bg-space-950 border border-slate-700/80 focus:border-emerald-400 text-xs text-emerald-300 focus:outline-none font-medium"
+                />
+                <span className="text-[10px] text-slate-500 font-mono">e.g. AI • Deep Learning</span>
+              </div>
+            </div>
+
+            {/* Live Visual Card Preview */}
+            <div className="pt-2 border-t border-slate-800/80">
+              <div className="text-[10px] font-mono text-slate-400 mb-2">Live Highlight Cards Preview:</div>
+              <div className="grid grid-cols-2 sm:grid-cols-4 gap-2.5">
+                <div className="p-3 rounded-xl bg-space-950/70 border border-slate-800/90 flex items-center gap-2.5">
+                  <div className="w-8 h-8 rounded-lg bg-cyan-500/10 border border-cyan-500/20 flex items-center justify-center text-cyan-400 shrink-0">
+                    <GraduationCap className="w-4 h-4" />
+                  </div>
+                  <div className="min-w-0">
+                    <div className="text-[9px] text-slate-500 font-mono uppercase tracking-wider">Degree</div>
+                    <div className="text-xs font-semibold text-white truncate">{highlights.degree || 'B.E. Computer Eng.'}</div>
+                  </div>
+                </div>
+
+                <div className="p-3 rounded-xl bg-space-950/70 border border-slate-800/90 flex items-center gap-2.5">
+                  <div className="w-8 h-8 rounded-lg bg-teal-500/10 border border-teal-500/20 flex items-center justify-center text-teal-400 shrink-0">
+                    <Building className="w-4 h-4" />
+                  </div>
+                  <div className="min-w-0">
+                    <div className="text-[9px] text-slate-500 font-mono uppercase tracking-wider">College</div>
+                    <div className="text-xs font-semibold text-white truncate">{highlights.college || 'ARMIET, Mumbai Univ.'}</div>
+                  </div>
+                </div>
+
+                <div className="p-3 rounded-xl bg-space-950/70 border border-slate-800/90 flex items-center gap-2.5">
+                  <div className="w-8 h-8 rounded-lg bg-sky-500/10 border border-sky-500/20 flex items-center justify-center text-sky-400 shrink-0">
+                    <Code2 className="w-4 h-4" />
+                  </div>
+                  <div className="min-w-0">
+                    <div className="text-[9px] text-slate-500 font-mono uppercase tracking-wider">Major Domain</div>
+                    <div className="text-xs font-semibold text-sky-300 truncate">{highlights.majorDomain || 'Full-Stack Development'}</div>
+                  </div>
+                </div>
+
+                <div className="p-3 rounded-xl bg-space-950/70 border border-slate-800/90 flex items-center gap-2.5">
+                  <div className="w-8 h-8 rounded-lg bg-emerald-500/10 border border-emerald-500/20 flex items-center justify-center text-emerald-400 shrink-0">
+                    <Cpu className="w-4 h-4" />
+                  </div>
+                  <div className="min-w-0">
+                    <div className="text-[9px] text-slate-500 font-mono uppercase tracking-wider">Specialization</div>
+                    <div className="text-xs font-semibold text-emerald-300 truncate">{highlights.specialization || 'AI • Deep Learning'}</div>
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
 
