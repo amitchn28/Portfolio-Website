@@ -23,13 +23,16 @@ body {
 ::-webkit-scrollbar {
   width: 8px;
 }
+
 ::-webkit-scrollbar-track {
   background: #020617;
 }
+
 ::-webkit-scrollbar-thumb {
   background: #0f2847;
   border-radius: 4px;
 }
+
 ::-webkit-scrollbar-thumb:hover {
   background: #06b6d4;
 }
@@ -67,7 +70,7 @@ body {
 /* Subtle High-Tech Blueprint Grid */
 .bg-cyber-grid {
   background-size: 48px 48px;
-  background-image: 
+  background-image:
     linear-gradient(to right, rgba(6, 182, 212, 0.035) 1px, transparent 1px),
     linear-gradient(to bottom, rgba(6, 182, 212, 0.035) 1px, transparent 1px);
 }
@@ -92,12 +95,44 @@ body {
   letter-spacing: 0.08em !important;
 }
 
+/* Dynamic Heading & Showcase Typography Choice (Configurable in Admin CMS) */
+[data-font-choice="outfit"] .font-heading,
+[data-font-choice="outfit"] .font-showcase {
+  font-family: 'Outfit', 'Plus Jakarta Sans', sans-serif !important;
+}
+
+[data-font-choice="space-grotesk"] .font-heading,
+[data-font-choice="space-grotesk"] .font-showcase {
+  font-family: 'Space Grotesk', sans-serif !important;
+}
+
+[data-font-choice="syne"] .font-heading,
+[data-font-choice="syne"] .font-showcase {
+  font-family: 'Syne', sans-serif !important;
+}
+
+[data-font-choice="silkscreen"] .font-heading,
+[data-font-choice="silkscreen"] .font-showcase {
+  font-family: 'Silkscreen', monospace !important;
+  letter-spacing: 0.04em !important;
+}
+
+[data-font-choice="jetbrains-mono"] .font-heading,
+[data-font-choice="jetbrains-mono"] .font-showcase {
+  font-family: 'JetBrains Mono', monospace !important;
+}
+
+[data-font-choice="inter"] .font-heading,
+[data-font-choice="inter"] .font-showcase {
+  font-family: 'Inter', sans-serif !important;
+}
+
 /* Hide scrollbar for Chrome, Safari, Edge, and Firefox */
 .no-scrollbar::-webkit-scrollbar {
   display: none;
 }
+
 .no-scrollbar {
   -ms-overflow-style: none;
   scrollbar-width: none;
 }
-

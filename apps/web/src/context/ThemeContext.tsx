@@ -186,6 +186,8 @@ interface ThemeContextType {
   setThemeById: (id: string) => void;
   fontMode: 'modern' | 'pixel';
   setFontMode: (mode: 'modern' | 'pixel') => void;
+  fontChoice: string;
+  setFontChoice: (choice: string) => void;
   siteSettings: any;
   refreshSettings: () => Promise<void>;
 }
@@ -206,11 +208,21 @@ const getInitialFontMode = (): 'modern' | 'pixel' => {
   return 'modern';
 };
 
+const getInitialFontChoice = (): string => {
+  try {
+    const cached = localStorage.getItem('amit_font_choice');
+    if (cached) return cached;
+  } catch {}
+  return 'outfit';
+};
+
 const ThemeContext = createContext<ThemeContextType>({
   theme: THEMES['sapphire-glow'],
   setThemeById: () => {},
   fontMode: 'modern',
   setFontMode: () => {},
+  fontChoice: 'outfit',
+  setFontChoice: () => {},
   siteSettings: null,
   refreshSettings: async () => {},
 });
@@ -218,6 +230,7 @@ const ThemeContext = createContext<ThemeContextType>({
 export const ThemeProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
   const [themeId, setThemeId] = useState<string>(getInitialTheme);
   const [fontMode, setFontMode] = useState<'modern' | 'pixel'>(getInitialFontMode);
+  const [fontChoice, setFontChoice] = useState<string>(getInitialFontChoice);
   const [siteSettings, setSiteSettings] = useState<any>(() => {
     try {
       const cached = localStorage.getItem('amit_cached_settings');
@@ -230,11 +243,13 @@ export const ThemeProvider: React.FC<{ children: ReactNode }> = ({ children }) =
   useEffect(() => {
     document.documentElement.setAttribute('data-theme', themeId);
     document.documentElement.setAttribute('data-font-mode', fontMode);
+    document.documentElement.setAttribute('data-font-choice', fontChoice);
     try {
       localStorage.setItem('amit_site_theme', themeId);
       localStorage.setItem('amit_font_mode', fontMode);
+      localStorage.setItem('amit_font_choice', fontChoice);
     } catch {}
-  }, [themeId, fontMode]);
+  }, [themeId, fontMode, fontChoice]);
 
   const refreshSettings = async () => {
     try {
@@ -246,13 +261,23 @@ export const ThemeProvider: React.FC<{ children: ReactNode }> = ({ children }) =
         } catch {}
 
         const rawTheme = data.website.theme || 'sapphire-glow';
-        let targetTheme = rawTheme;
+        let targetTheme = 'sapphire-glow';
         let targetFontMode: 'modern' | 'pixel' = 'modern';
+        let targetFontChoice = 'outfit';
 
         if (rawTheme.includes('::')) {
           const parts = rawTheme.split('::');
-          targetTheme = parts[0];
-          targetFontMode = parts[1] === 'pixel' ? 'pixel' : 'modern';
+          targetTheme = parts[0] || 'sapphire-glow';
+          for (let i = 1; i < parts.length; i++) {
+            const p = parts[i];
+            if (p.startsWith('font:')) {
+              targetFontChoice = p.replace('font:', '');
+            } else if (p === 'pixel' || p === 'modern') {
+              targetFontMode = p;
+            }
+          }
+        } else {
+          targetTheme = rawTheme;
         }
 
         if (THEMES[targetTheme]) {
@@ -263,8 +288,10 @@ export const ThemeProvider: React.FC<{ children: ReactNode }> = ({ children }) =
         }
 
         setFontMode(targetFontMode);
+        setFontChoice(targetFontChoice);
         try {
           localStorage.setItem('amit_font_mode', targetFontMode);
+          localStorage.setItem('amit_font_choice', targetFontChoice);
         } catch {}
       }
     } catch {
@@ -295,6 +322,13 @@ export const ThemeProvider: React.FC<{ children: ReactNode }> = ({ children }) =
           setFontMode(mode);
           try {
             localStorage.setItem('amit_font_mode', mode);
+          } catch {}
+        },
+        fontChoice,
+        setFontChoice: (choice: string) => {
+          setFontChoice(choice);
+          try {
+            localStorage.setItem('amit_font_choice', choice);
           } catch {}
         },
         siteSettings,

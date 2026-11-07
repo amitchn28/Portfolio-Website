@@ -9,6 +9,7 @@ export const AppearanceView: React.FC = () => {
   const [saving, setSaving] = useState(false);
 
   const [fontMode, setFontMode] = useState<'modern' | 'pixel'>('modern');
+  const [fontChoice, setFontChoice] = useState<string>('outfit');
 
   const [form, setForm] = useState({
     siteName: 'Amit Chauhan',
@@ -25,13 +26,23 @@ export const AppearanceView: React.FC = () => {
       const data = await adminApi.getAdminSettings();
       if (data?.website) {
         const rawTheme = data.website.theme || 'sapphire-glow';
-        let activeTheme = rawTheme;
+        let activeTheme = 'sapphire-glow';
         let activeFontMode: 'modern' | 'pixel' = 'modern';
+        let activeFontChoice = 'outfit';
 
         if (rawTheme.includes('::')) {
           const parts = rawTheme.split('::');
-          activeTheme = parts[0];
-          activeFontMode = parts[1] === 'pixel' ? 'pixel' : 'modern';
+          activeTheme = parts[0] || 'sapphire-glow';
+          for (let i = 1; i < parts.length; i++) {
+            const p = parts[i];
+            if (p.startsWith('font:')) {
+              activeFontChoice = p.replace('font:', '');
+            } else if (p === 'pixel' || p === 'modern') {
+              activeFontMode = p;
+            }
+          }
+        } else {
+          activeTheme = rawTheme;
         }
 
         setForm({
@@ -43,6 +54,7 @@ export const AppearanceView: React.FC = () => {
           theme: activeTheme,
         });
         setFontMode(activeFontMode);
+        setFontChoice(activeFontChoice);
       }
     } catch (err: any) {
       error(err.message || 'Failed to load website settings');
@@ -59,7 +71,7 @@ export const AppearanceView: React.FC = () => {
     e.preventDefault();
     setSaving(true);
     try {
-      const themePayload = fontMode === 'pixel' ? `${form.theme}::pixel` : form.theme;
+      const themePayload = `${form.theme}::font:${fontChoice}::${fontMode}`;
       await adminApi.updateWebsiteSettings({
         ...form,
         theme: themePayload,
@@ -327,6 +339,96 @@ export const AppearanceView: React.FC = () => {
                   Refined sleek cyber palette with indigo &amp; cyan highlights.
                 </p>
               </div>
+            </div>
+          </div>
+
+          {/* Heading & Showcase Font Family Switcher */}
+          <div className="p-6 rounded-2xl bg-space-950/90 border border-slate-800 space-y-4">
+            <div className="flex items-center justify-between">
+              <div>
+                <h3 className="text-sm font-bold text-white font-cyber uppercase tracking-wider flex items-center gap-2">
+                  <span>✦ Showcase &amp; Heading Font Family</span>
+                  <span className="text-[10px] font-mono px-2 py-0.5 rounded-full bg-cyan-500/10 text-cyan-300 border border-cyan-500/20">
+                    Live Typography Picker
+                  </span>
+                </h3>
+                <p className="text-xs text-slate-400 mt-1">
+                  Choose the primary display font used for the giant rotating words (Developer, Programmer, Gamer, Coder) and main section titles.
+                </p>
+              </div>
+            </div>
+
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 pt-1">
+              {[
+                {
+                  id: 'outfit',
+                  name: 'Outfit (Recommended)',
+                  tagline: 'Sleek, rounded-geometric modern display font',
+                  preview: 'DEVELOPER // CODER',
+                  fontFamily: "'Outfit', sans-serif",
+                },
+                {
+                  id: 'space-grotesk',
+                  name: 'Space Grotesk',
+                  tagline: 'Futuristic high-tech cyber grotesque aesthetic',
+                  preview: 'DEVELOPER // CODER',
+                  fontFamily: "'Space Grotesk', sans-serif",
+                },
+                {
+                  id: 'syne',
+                  name: 'Syne',
+                  tagline: 'Ultra-wide contemporary Awwwards agency style',
+                  preview: 'DEVELOPER // CODER',
+                  fontFamily: "'Syne', sans-serif",
+                },
+                {
+                  id: 'silkscreen',
+                  name: 'Silkscreen',
+                  tagline: 'Retro 8-bit arcade and cyberpunk pixel font',
+                  preview: 'DEVELOPER // CODER',
+                  fontFamily: "'Silkscreen', monospace",
+                },
+                {
+                  id: 'jetbrains-mono',
+                  name: 'JetBrains Mono',
+                  tagline: 'Precision monospace code-editor style',
+                  preview: 'DEVELOPER // CODER',
+                  fontFamily: "'JetBrains Mono', monospace",
+                },
+                {
+                  id: 'inter',
+                  name: 'Inter',
+                  tagline: 'Clean, minimalist contemporary neutral sans',
+                  preview: 'DEVELOPER // CODER',
+                  fontFamily: "'Inter', sans-serif",
+                },
+              ].map((f) => (
+                <div
+                  key={f.id}
+                  onClick={() => setFontChoice(f.id)}
+                  className={`p-4 rounded-xl border cursor-pointer transition-all ${
+                    fontChoice === f.id
+                      ? 'border-cyan-400 bg-space-900 shadow-glow-card ring-1 ring-cyan-400/50'
+                      : 'border-slate-800 bg-space-900/40 opacity-70 hover:opacity-100 hover:border-slate-700'
+                  }`}
+                >
+                  <div className="flex items-center justify-between mb-1.5">
+                    <span className="text-xs font-bold text-white uppercase tracking-wider">
+                      {f.name}
+                    </span>
+                    {fontChoice === f.id && <Check className="w-4 h-4 text-cyan-400" />}
+                  </div>
+                  <p className="text-[11px] text-slate-400 leading-snug">
+                    {f.tagline}
+                  </p>
+                  <div
+                    className="pt-3 text-xs sm:text-sm font-black tracking-wider text-cyan-300"
+                    style={{ fontFamily: f.fontFamily }}
+                  >
+                    {f.preview}
+                  </div>
+                </div>
+              ))}
             </div>
           </div>
 

@@ -173,7 +173,7 @@ export const About: React.FC<AboutProps> = ({ profileData }) => {
                 transition={{ duration: 0.45, ease: [0.22, 1, 0.36, 1] }}
                 className="relative"
               >
-                <h3 className={`text-4xl sm:text-6xl md:text-7xl lg:text-8xl font-black font-heading tracking-tight uppercase bg-clip-text text-transparent bg-gradient-to-r ${theme.primaryGradient} select-none drop-shadow-[0_0_35px_rgba(6,182,212,0.35)]`}>
+                <h3 className={`text-4xl sm:text-6xl md:text-7xl lg:text-8xl font-black font-heading font-showcase tracking-tight uppercase bg-clip-text text-transparent bg-gradient-to-r ${theme.primaryGradient} select-none drop-shadow-[0_0_35px_rgba(6,182,212,0.35)]`}>
                   {rolesList[safeIndex]}
                 </h3>
               </motion.div>

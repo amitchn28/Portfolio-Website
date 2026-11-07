@@ -28,7 +28,6 @@ const MOBILE_NAV_ITEMS: NavItem[] = [
 export const Navbar: React.FC = () => {
   const { theme } = useTheme();
   const [activeSection, setActiveSection] = useState('home');
-  const [isScrolled, setIsScrolled] = useState(false);
   const isClickScrolling = useRef(false);
 
   useEffect(() => {
@@ -37,8 +36,6 @@ export const Navbar: React.FC = () => {
     const handleScroll = () => {
       if (!ticking) {
         window.requestAnimationFrame(() => {
-          setIsScrolled(window.scrollY > 20);
-
           if (!isClickScrolling.current) {
             if (window.scrollY < 100) {
               setActiveSection('home');
@@ -99,13 +96,7 @@ export const Navbar: React.FC = () => {
     <>
       {/* ================= DESKTOP NAVIGATION: Top Centered Floating Spring Pill ================= */}
       <header className="hidden sm:block fixed top-0 left-0 right-0 z-50 pointer-events-none transition-all duration-300">
-        <div
-          className={`absolute inset-0 h-24 bg-gradient-to-b from-[#020617] via-[#020617]/85 to-transparent pointer-events-none transition-opacity duration-300 ${
-            isScrolled ? 'opacity-95 backdrop-blur-md' : 'opacity-0'
-          }`}
-        />
-
-        <div className="relative flex justify-center pt-5 px-6 pointer-events-auto">
+        <div className="flex justify-center pt-5 px-6 pointer-events-auto">
           <nav className="nav-pill rounded-full px-6 py-2 flex items-center justify-center gap-2 transition-all duration-300 shadow-2xl">
             <div className="flex items-center gap-1.5 relative">
               {NAV_ITEMS.map((item) => {
