@@ -8,20 +8,20 @@ import { ApiResponse } from '@amit/shared';
 const router = Router();
 
 const updateProfileSchema = z.object({
-  name: z.string().min(1).optional(),
-  headline: z.string().min(1).optional(),
-  tagline: z.string().min(1).optional(),
-  shortBio: z.string().min(1).optional(),
-  fullBio: z.string().min(1).optional(),
+  name: z.string().optional(),
+  headline: z.string().optional(),
+  tagline: z.string().optional(),
+  shortBio: z.string().optional(),
+  fullBio: z.string().optional(),
   avatarUrl: z.string().nullable().optional(),
   bannerUrl: z.string().nullable().optional(),
   resumeUrl: z.string().nullable().optional(),
-  location: z.string().min(1).optional(),
-  email: z.string().email().optional(),
+  location: z.string().optional(),
+  email: z.string().optional(),
   phone: z.string().nullable().optional(),
   availability: z.string().optional(),
-  currentStatus: z.string().min(1).optional(),
-  yearsOfExperience: z.number().int().min(0).optional(),
+  currentStatus: z.string().optional(),
+  yearsOfExperience: z.union([z.number(), z.string().transform((v) => parseInt(v) || 0)]).optional(),
 });
 
 // GET /api/profile (Public)

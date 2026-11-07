@@ -1,0 +1,151 @@
+%PDF-1.4
+1 0 obj
+<< /Type /Catalog /Pages 2 0 R >>
+endobj
+2 0 obj
+<< /Type /Pages /Kids [3 0 R] /Count 1 >>
+endobj
+3 0 obj
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 595.28 841.89] /Contents 4 0 R /Resources << /Font << /F1 5 0 R /F2 6 0 R >> >> >>
+endobj
+4 0 obj
+<< /Length 2076 >>
+stream
+BT
+/F1 18 Tf
+50 780 Td
+(AMIT CHAUHAN) Tj
+ET
+BT
+/F1 11 Tf
+50 760 Td
+(Software Engineer | AI Developer) Tj
+ET
+BT
+/F2 9 Tf
+50 745 Td
+(Email: amitchn28@gmail.com  |  Location: Mumbai, India  |  Portfolio: https://amiiit-portfolio.vercel.app) Tj
+ET
+BT
+/F1 9 Tf
+50 735 Td
+(_____________________________________________________________________________________) Tj
+ET
+BT
+/F1 12 Tf
+50 710 Td
+(EDUCATION) Tj
+ET
+BT
+/F2 9.5 Tf
+50 692 Td
+(Bachelor of Engineering in Computer Engineering \(2023 - 2027\)) Tj
+ET
+BT
+/F2 9.5 Tf
+50 678 Td
+(ARMIET, University of Mumbai) Tj
+ET
+BT
+/F2 9.5 Tf
+50 664 Td
+(Specialization: Full-Stack Systems, Distributed Systems, Machine Learning) Tj
+ET
+BT
+/F1 12 Tf
+50 638 Td
+(TECHNICAL SKILLS) Tj
+ET
+BT
+/F2 9.5 Tf
+50 620 Td
+(- Languages: C++, Java, Python, JavaScript, TypeScript, SQL) Tj
+ET
+BT
+/F2 9.5 Tf
+50 606 Td
+(- Frontend: React.js, Tailwind CSS, Vite, Framer Motion) Tj
+ET
+BT
+/F2 9.5 Tf
+50 592 Td
+(- Backend: Node.js, Express.js, REST APIs, Microservices Architecture) Tj
+ET
+BT
+/F2 9.5 Tf
+50 578 Td
+(- Databases & Cloud: PostgreSQL \(Neon\), MongoDB, Prisma ORM, Docker, Vercel, Render) Tj
+ET
+BT
+/F1 12 Tf
+50 552 Td
+(PROJECT HIGHLIGHTS) Tj
+ET
+BT
+/F2 9.5 Tf
+50 534 Td
+(1. Hybrid Quantum Machine Learning Pipeline) Tj
+ET
+BT
+/F2 9.5 Tf
+50 520 Td
+(   - Developed quantum-classical neural network architectures optimizing parameter convergence.) Tj
+ET
+BT
+/F2 9.5 Tf
+50 506 Td
+(2. Medical Image Processing \(CNN\)) Tj
+ET
+BT
+/F2 9.5 Tf
+50 492 Td
+(   - High-precision medical imaging classifier utilizing PyTorch and transfer learning.) Tj
+ET
+BT
+/F2 9.5 Tf
+50 478 Td
+(3. Cloud Portfolio & Custom Headless CMS Monorepo) Tj
+ET
+BT
+/F2 9.5 Tf
+50 464 Td
+(   - Scalable full-stack monorepo with automated deployment, Argon2 JWT authentication, and Neon PostgreSQL.) Tj
+ET
+BT
+/F1 12 Tf
+50 438 Td
+(ABOUT) Tj
+ET
+BT
+/F2 9.5 Tf
+50 420 Td
+(Passionate computer engineering student dedicated to building high-performance, resilient systems) Tj
+ET
+BT
+/F2 9.5 Tf
+50 406 Td
+(and meaningful AI solutions. Available for software engineering and machine learning opportunities.) Tj
+ET
+
+endstream
+endobj
+5 0 obj
+<< /Type /Font /Subtype /Type1 /BaseFont /Helvetica-Bold >>
+endobj
+6 0 obj
+<< /Type /Font /Subtype /Type1 /BaseFont /Helvetica >>
+endobj
+xref
+0 7
+0000000000 65535 f 
+0000000009 00000 n 
+0000000058 00000 n 
+0000000115 00000 n 
+0000000257 00000 n 
+0000002385 00000 n 
+0000002460 00000 n 
+trailer
+<< /Size 7 /Root 1 0 R >>
+startxref
+2530
+%%EOF

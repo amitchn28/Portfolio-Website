@@ -87,14 +87,15 @@ export const ResumeModal: React.FC<ResumeModalProps> = ({ isOpen, onClose, resum
               </button>
 
               <a
-                href={resumeUrl || '#contact'}
+                href={resumeUrl || '/Amit_Chauhan_Resume.pdf'}
+                download="Amit_Chauhan_Resume.pdf"
                 onClick={() => portfolioApi.recordEvent('RESUME_DOWNLOAD', '/resume')}
-                target={resumeUrl ? '_blank' : '_self'}
+                target="_blank"
                 rel="noopener noreferrer"
                 className="px-5 py-2.5 rounded-xl bg-gradient-to-r from-cyan-500 to-emerald-600 hover:from-cyan-400 hover:to-emerald-500 text-slate-950 font-bold text-xs flex items-center gap-2 shadow-lg shadow-cyan-500/25 transition-all"
               >
                 <Download className="w-4 h-4" />
-                <span>{resumeUrl ? 'Download PDF' : 'Request Resume PDF'}</span>
+                <span>Download PDF</span>
               </a>
             </div>
           </div>

@@ -23,7 +23,13 @@ import {
 
 const PortfolioInner: React.FC = () => {
   const { theme, siteSettings } = useTheme();
-  const [profile, setProfile] = useState<any>(FALLBACK_PROFILE);
+  const [profile, setProfile] = useState<any>(() => {
+    try {
+      const cached = localStorage.getItem('amit_cached_profile');
+      if (cached) return JSON.parse(cached);
+    } catch {}
+    return FALLBACK_PROFILE;
+  });
   const [education, setEducation] = useState<any[]>(FALLBACK_EDUCATION);
   const [skills, setSkills] = useState<any[]>(FALLBACK_SKILLS);
   const [projects, setProjects] = useState<any[]>(FALLBACK_PROJECTS);
@@ -46,6 +52,9 @@ const PortfolioInner: React.FC = () => {
 
         if (profData.status === 'fulfilled' && profData.value) {
           setProfile(profData.value);
+          try {
+            localStorage.setItem('amit_cached_profile', JSON.stringify(profData.value));
+          } catch {}
         }
         if (eduData.status === 'fulfilled' && Array.isArray(eduData.value) && eduData.value.length > 0) {
           setEducation(eduData.value);

@@ -17,23 +17,19 @@ const NAV_ITEMS: NavItem[] = [
   { id: 'contact', label: 'Contact' },
 ];
 
+const MOBILE_NAV_ITEMS: NavItem[] = [
+  { id: 'home', label: 'Home' },
+  { id: 'about', label: 'About' },
+  { id: 'projects', label: 'Work' },
+  { id: 'skills', label: 'Skills' },
+  { id: 'contact', label: 'Contact' },
+];
+
 export const Navbar: React.FC = () => {
   const { theme } = useTheme();
   const [activeSection, setActiveSection] = useState('home');
   const [isScrolled, setIsScrolled] = useState(false);
   const isClickScrolling = useRef(false);
-  const itemRefs = useRef<Record<string, HTMLButtonElement | null>>({});
-
-  // Auto-scroll active tab into center on mobile when sections change
-  useEffect(() => {
-    if (activeSection && itemRefs.current[activeSection]) {
-      itemRefs.current[activeSection]?.scrollIntoView({
-        behavior: 'smooth',
-        inline: 'center',
-        block: 'nearest',
-      });
-    }
-  }, [activeSection]);
 
   useEffect(() => {
     let ticking = false;
@@ -43,9 +39,7 @@ export const Navbar: React.FC = () => {
         window.requestAnimationFrame(() => {
           setIsScrolled(window.scrollY > 20);
 
-          // If currently in a programmatic click-scroll, avoid overriding
           if (!isClickScrolling.current) {
-            // Check top / bottom boundaries
             if (window.scrollY < 100) {
               setActiveSection('home');
             } else if (
@@ -54,7 +48,6 @@ export const Navbar: React.FC = () => {
             ) {
               setActiveSection('contact');
             } else {
-              // Calculate which section is closest to viewport reading center (35% from top)
               const viewportTarget = window.innerHeight * 0.35;
               let bestSection = 'home';
               let smallestDistance = Infinity;
@@ -97,67 +90,101 @@ export const Navbar: React.FC = () => {
       element.scrollIntoView({ behavior: 'smooth' });
     }
 
-    // Release programmatic scroll lock after smooth scroll settles
     setTimeout(() => {
       isClickScrolling.current = false;
     }, 700);
   };
 
   return (
-    <header className="fixed top-0 left-0 right-0 z-50 pointer-events-none transition-all duration-300">
-      {/* Top ambient gradient mask: strictly disabled on mobile to prevent any blurred background band */}
-      <div
-        className={`hidden sm:block absolute inset-0 h-20 sm:h-24 bg-gradient-to-b from-[#020617] via-[#020617]/85 to-transparent pointer-events-none transition-opacity duration-300 ${
-          isScrolled ? 'opacity-95 backdrop-blur-md' : 'opacity-0'
-        }`}
-      />
+    <>
+      {/* ================= DESKTOP NAVIGATION: Top Centered Floating Spring Pill ================= */}
+      <header className="hidden sm:block fixed top-0 left-0 right-0 z-50 pointer-events-none transition-all duration-300">
+        <div
+          className={`absolute inset-0 h-24 bg-gradient-to-b from-[#020617] via-[#020617]/85 to-transparent pointer-events-none transition-opacity duration-300 ${
+            isScrolled ? 'opacity-95 backdrop-blur-md' : 'opacity-0'
+          }`}
+        />
 
-      {/* Centered Floating Pill (contained inside screen margins on mobile, spacious & sleek) */}
-      <div className="relative flex justify-center pt-3 sm:pt-5 px-3 sm:px-6 pointer-events-auto">
-        <nav
-          className="nav-pill rounded-full px-2 sm:px-6 py-1.5 sm:py-2 flex items-center justify-center max-w-[calc(100vw-24px)] sm:max-w-none transition-all duration-300 shadow-2xl"
-        >
-          {/* Silky Gliding Interactive Tabs with glowing indicator bead */}
-          <div className="flex items-center gap-1 sm:gap-1.5 relative overflow-x-auto no-scrollbar scroll-smooth py-0.5 px-1 max-w-full">
-            {NAV_ITEMS.map((item) => {
-              const isActive = activeSection === item.id;
-              return (
-                <button
-                  key={item.id}
-                  ref={(el) => {
-                    itemRefs.current[item.id] = el;
-                  }}
-                  onClick={() => scrollToSection(item.id)}
-                  className={`relative px-3 sm:px-4 py-1.5 rounded-full text-xs font-medium whitespace-nowrap transition-colors duration-200 z-10 ${
-                    isActive
-                      ? 'text-white font-semibold'
-                      : 'text-slate-400 hover:text-slate-200 hover:bg-slate-800/30'
-                  }`}
-                >
-                  {/* Gliding Active Pill Tile (Framer Motion Spring Physics) */}
-                  {isActive && (
-                    <motion.div
-                      layoutId="activeNavTile"
-                      transition={{ type: 'spring', stiffness: 380, damping: 30 }}
-                      className={`absolute inset-0 rounded-full ${theme.badgeBg} border ${theme.badgeBorder} shadow-lg -z-10`}
-                    >
-                      {/* Active bottom glow bead */}
-                      <span
-                        className="absolute -bottom-1 left-1/2 -translate-x-1/2 w-1.5 h-1.5 rounded-full"
-                        style={{
-                          backgroundColor: theme.cursorColor,
-                          boxShadow: `0 0 10px ${theme.cursorColor}`,
-                        }}
-                      />
-                    </motion.div>
+        <div className="relative flex justify-center pt-5 px-6 pointer-events-auto">
+          <nav className="nav-pill rounded-full px-6 py-2 flex items-center justify-center gap-2 transition-all duration-300 shadow-2xl">
+            <div className="flex items-center gap-1.5 relative">
+              {NAV_ITEMS.map((item) => {
+                const isActive = activeSection === item.id;
+                return (
+                  <button
+                    key={item.id}
+                    onClick={() => scrollToSection(item.id)}
+                    className={`relative px-4 py-1.5 rounded-full text-xs font-medium transition-colors duration-200 z-10 ${
+                      isActive
+                        ? 'text-white font-semibold'
+                        : 'text-slate-400 hover:text-slate-200 hover:bg-slate-800/30'
+                    }`}
+                  >
+                    {isActive && (
+                      <motion.div
+                        layoutId="activeNavTile"
+                        transition={{ type: 'spring', stiffness: 380, damping: 30 }}
+                        className={`absolute inset-0 rounded-full ${theme.badgeBg} border ${theme.badgeBorder} shadow-lg -z-10`}
+                      >
+                        <span
+                          className="absolute -bottom-1 left-1/2 -translate-x-1/2 w-1.5 h-1.5 rounded-full"
+                          style={{
+                            backgroundColor: theme.cursorColor,
+                            boxShadow: `0 0 10px ${theme.cursorColor}`,
+                          }}
+                        />
+                      </motion.div>
+                    )}
+                    <span className="relative z-10">{item.label}</span>
+                  </button>
+                );
+              })}
+            </div>
+          </nav>
+        </div>
+      </header>
+
+      {/* ================= MOBILE NAVIGATION: Bottom Floating Dock (Screen Ke Niche) ================= */}
+      <div className="sm:hidden fixed bottom-5 inset-x-0 z-50 pointer-events-none flex justify-center px-4 pb-[env(safe-area-inset-bottom)]">
+        <nav className="nav-pill pointer-events-auto rounded-full px-3 py-1.5 flex items-center justify-center gap-1 shadow-2xl shadow-black/90 border border-slate-700/80 bg-slate-950/90 backdrop-blur-xl">
+          {MOBILE_NAV_ITEMS.map((item) => {
+            const isActive = activeSection === item.id;
+            return (
+              <button
+                key={item.id}
+                onClick={() => scrollToSection(item.id)}
+                className={`relative px-3 py-1.5 rounded-full text-xs font-medium whitespace-nowrap transition-colors duration-200 z-10 ${
+                  isActive
+                    ? 'text-white font-semibold'
+                    : 'text-slate-400 hover:text-slate-200'
+                }`}
+              >
+                {isActive && (
+                  <motion.div
+                    layoutId="activeMobileNavTile"
+                    transition={{ type: 'spring', stiffness: 380, damping: 30 }}
+                    className={`absolute inset-0 rounded-full ${theme.badgeBg} border ${theme.badgeBorder} shadow-lg -z-10`}
+                  >
+                    <span
+                      className="absolute -bottom-1 left-1/2 -translate-x-1/2 w-1.5 h-1.5 rounded-full"
+                      style={{
+                        backgroundColor: theme.cursorColor,
+                        boxShadow: `0 0 8px ${theme.cursorColor}`,
+                      }}
+                    />
+                  </motion.div>
+                )}
+                <span className="relative z-10 flex items-center gap-1">
+                  {item.id === 'home' && isActive && (
+                    <span className="text-[10px] text-amber-400">✦</span>
                   )}
-                  <span className="relative z-10">{item.label}</span>
-                </button>
-              );
-            })}
-          </div>
+                  <span>{item.label}</span>
+                </span>
+              </button>
+            );
+          })}
         </nav>
       </div>
-    </header>
+    </>
   );
 };

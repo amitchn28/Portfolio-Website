@@ -92,16 +92,26 @@ export const ProfileView: React.FC = () => {
   const handleCropComplete = async (croppedFile: File) => {
     setUploadingImage(true);
     try {
-      const res = await adminApi.uploadFile(croppedFile, 'profile');
-      if (res?.url) {
-        const fullUrl = getAssetUrl(res.url);
-        const updated = { ...formData, avatarUrl: fullUrl };
-        setFormData(updated);
-        // Automatically save to PostgreSQL database immediately
-        await adminApi.updateProfile(updated);
-        success('Profile photo uploaded & saved to database successfully!');
-        setIsCropperOpen(false);
+      // Read cropped file as Data URL for permanent resilience in Neon PostgreSQL
+      const reader = new FileReader();
+      const dataUrlPromise = new Promise<string>((resolve) => {
+        reader.onload = () => resolve(reader.result as string);
+        reader.readAsDataURL(croppedFile);
+      });
+      const dataUrl = await dataUrlPromise;
+
+      // Also upload file to backend disk as backup
+      try {
+        await adminApi.uploadFile(croppedFile, 'profile');
+      } catch {
+        // Data URL in PostgreSQL will guarantee it never 404s
       }
+
+      const updated = { ...formData, avatarUrl: dataUrl };
+      setFormData(updated);
+      await adminApi.updateProfile(updated);
+      success('Profile photo saved permanently to database!');
+      setIsCropperOpen(false);
     } catch (err: any) {
       error(err.message || 'Failed to upload photo');
     } finally {
@@ -117,8 +127,15 @@ export const ProfileView: React.FC = () => {
     e.preventDefault();
     setSaving(true);
     try {
-      await adminApi.updateProfile(formData);
-      success('Profile successfully updated and saved to PostgreSQL!');
+      const payload = {
+        ...formData,
+        yearsOfExperience: Number(formData.yearsOfExperience) || 0,
+      };
+      const res = await adminApi.updateProfile(payload);
+      if (res) {
+        setFormData((prev) => ({ ...prev, ...res }));
+      }
+      success('Profile details successfully updated and saved to PostgreSQL!');
     } catch (err: any) {
       error(err.message || 'Failed to update profile');
     } finally {

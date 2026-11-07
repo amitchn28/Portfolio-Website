@@ -9,6 +9,8 @@ export const FALLBACK_PROFILE = {
   fullBio: `I am someone who thrives on learning, problem-solving, and continuous growth. My personality blends curiosity, adaptability, and persistence, which helps me approach challenges with optimism and clarity. I value collaboration and clear communication, but I am equally comfortable taking initiative and working independently.
 
 At my core, I am driven by a desire to make an impact, stay open to new perspectives, and keep evolving both personally and professionally.`,
+  avatarUrl: '/avatar.webp',
+  resumeUrl: '/Amit_Chauhan_Resume.pdf',
   location: 'Mumbai, India',
   email: '',
   currentStatus: 'CS Student',
