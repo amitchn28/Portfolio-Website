@@ -1,0 +1,28 @@
+{
+  "name": "amit-portfolio",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Amit Chauhan Personal Portfolio & Admin CMS Monorepo",
+  "workspaces": [
+    "apps/*",
+    "packages/*"
+  ],
+  "scripts": {
+    "dev": "concurrently -n \"API,WEB,ADMIN\" -c \"blue,cyan,magenta\" \"npm run dev:api\" \"npm run dev:web\" \"npm run dev:admin\"",
+    "dev:web": "npm run dev --workspace=@amit/web",
+    "dev:admin": "npm run dev --workspace=@amit/admin",
+    "dev:api": "npm run dev --workspace=@amit/api",
+    "build": "npm run build --workspaces --if-present",
+    "build:shared": "npm run build --workspace=@amit/shared",
+    "build:web": "npm run build --workspace=@amit/web",
+    "build:admin": "npm run build --workspace=@amit/admin",
+    "build:api": "npm run build --workspace=@amit/api",
+    "clean": "rimraf node_modules apps/*/node_modules packages/*/node_modules apps/*/dist packages/*/dist"
+  },
+  "devDependencies": {
+    "concurrently": "^9.1.2",
+    "rimraf": "^6.0.1",
+    "typescript": "^5.7.3"
+  }
+}
+

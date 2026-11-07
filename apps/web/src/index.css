@@ -1,0 +1,79 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  color-scheme: dark;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  background-color: #020617;
+  color: #f1f5f9;
+  font-family: 'Inter', system-ui, sans-serif;
+  overflow-x: hidden;
+}
+
+/* Custom Scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+}
+::-webkit-scrollbar-track {
+  background: #020617;
+}
+::-webkit-scrollbar-thumb {
+  background: #0f2847;
+  border-radius: 4px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #06b6d4;
+}
+
+/* Cyber Aqua & Aurora Emerald Gradient Accent */
+.cyber-accent {
+  background: linear-gradient(135deg, #38bdf8 0%, #06b6d4 45%, #10b981 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.cyber-card {
+  background: rgba(5, 11, 24, 0.75);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  border: 1px solid rgba(6, 182, 212, 0.15);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.cyber-card:hover {
+  border-color: rgba(6, 182, 212, 0.45);
+  box-shadow: 0 12px 35px -10px rgba(6, 182, 212, 0.25);
+}
+
+/* Glassmorphism nav */
+.nav-pill {
+  background: rgba(4, 9, 20, 0.88);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid rgba(6, 182, 212, 0.22);
+  box-shadow: 0 10px 30px -5px rgba(0, 0, 0, 0.75), 0 0 25px -5px rgba(6, 182, 212, 0.18);
+  will-change: transform;
+}
+
+/* Subtle High-Tech Blueprint Grid */
+.bg-cyber-grid {
+  background-size: 48px 48px;
+  background-image: 
+    linear-gradient(to right, rgba(6, 182, 212, 0.035) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(6, 182, 212, 0.035) 1px, transparent 1px);
+}
+
+/* Retro-Tech Pixel Accent Typography */
+.pixel-text {
+  font-family: 'Silkscreen', monospace;
+  letter-spacing: 0.08em;
+}
