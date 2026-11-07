@@ -77,3 +77,13 @@ body {
   font-family: 'Silkscreen', monospace;
   letter-spacing: 0.08em;
 }
+
+/* Hide scrollbar for Chrome, Safari, Edge, and Firefox */
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+.no-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
