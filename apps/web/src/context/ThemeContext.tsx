@@ -184,6 +184,11 @@ export const THEMES: Record<string, ThemeConfig> = {
 interface ThemeContextType {
   theme: ThemeConfig;
   setThemeById: (id: string) => void;
+  headingFont: string;
+  setHeadingFont: (font: string) => void;
+  accentFont: string;
+  setAccentFont: (font: string) => void;
+  // Legacy aliases
   fontMode: 'modern' | 'pixel';
   setFontMode: (mode: 'modern' | 'pixel') => void;
   fontChoice: string;
@@ -200,25 +205,30 @@ const getInitialTheme = (): string => {
   return 'sapphire-glow'; // Matches active production theme to eliminate initial flicker
 };
 
-const getInitialFontMode = (): 'modern' | 'pixel' => {
+const getInitialHeadingFont = (): string => {
   try {
-    const cached = localStorage.getItem('amit_font_mode');
-    if (cached === 'pixel' || cached === 'modern') return cached;
-  } catch {}
-  return 'modern';
-};
-
-const getInitialFontChoice = (): string => {
-  try {
-    const cached = localStorage.getItem('amit_font_choice');
+    const cached = localStorage.getItem('amit_heading_font') || localStorage.getItem('amit_font_choice');
     if (cached) return cached;
   } catch {}
   return 'outfit';
 };
 
+const getInitialAccentFont = (): string => {
+  try {
+    const cached = localStorage.getItem('amit_accent_font');
+    if (cached) return cached;
+    if (localStorage.getItem('amit_font_mode') === 'pixel') return 'silkscreen';
+  } catch {}
+  return 'space-grotesk';
+};
+
 const ThemeContext = createContext<ThemeContextType>({
   theme: THEMES['sapphire-glow'],
   setThemeById: () => {},
+  headingFont: 'outfit',
+  setHeadingFont: () => {},
+  accentFont: 'space-grotesk',
+  setAccentFont: () => {},
   fontMode: 'modern',
   setFontMode: () => {},
   fontChoice: 'outfit',
@@ -229,8 +239,9 @@ const ThemeContext = createContext<ThemeContextType>({
 
 export const ThemeProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
   const [themeId, setThemeId] = useState<string>(getInitialTheme);
-  const [fontMode, setFontMode] = useState<'modern' | 'pixel'>(getInitialFontMode);
-  const [fontChoice, setFontChoice] = useState<string>(getInitialFontChoice);
+  const [headingFont, setHeadingFont] = useState<string>(getInitialHeadingFont);
+  const [accentFont, setAccentFont] = useState<string>(getInitialAccentFont);
+
   const [siteSettings, setSiteSettings] = useState<any>(() => {
     try {
       const cached = localStorage.getItem('amit_cached_settings');
@@ -241,15 +252,21 @@ export const ThemeProvider: React.FC<{ children: ReactNode }> = ({ children }) =
 
   // Keep document attributes and localStorage in immediate sync
   useEffect(() => {
+    const isPixel = accentFont === 'silkscreen' || accentFont === 'vt323' || accentFont === 'press-start';
     document.documentElement.setAttribute('data-theme', themeId);
-    document.documentElement.setAttribute('data-font-mode', fontMode);
-    document.documentElement.setAttribute('data-font-choice', fontChoice);
+    document.documentElement.setAttribute('data-heading-font', headingFont);
+    document.documentElement.setAttribute('data-accent-font', accentFont);
+    document.documentElement.setAttribute('data-font-choice', headingFont);
+    document.documentElement.setAttribute('data-font-mode', isPixel ? 'pixel' : 'modern');
+
     try {
       localStorage.setItem('amit_site_theme', themeId);
-      localStorage.setItem('amit_font_mode', fontMode);
-      localStorage.setItem('amit_font_choice', fontChoice);
+      localStorage.setItem('amit_heading_font', headingFont);
+      localStorage.setItem('amit_font_choice', headingFont);
+      localStorage.setItem('amit_accent_font', accentFont);
+      localStorage.setItem('amit_font_mode', isPixel ? 'pixel' : 'modern');
     } catch {}
-  }, [themeId, fontMode, fontChoice]);
+  }, [themeId, headingFont, accentFont]);
 
   const refreshSettings = async () => {
     try {
@@ -262,18 +279,24 @@ export const ThemeProvider: React.FC<{ children: ReactNode }> = ({ children }) =
 
         const rawTheme = data.website.theme || 'sapphire-glow';
         let targetTheme = 'sapphire-glow';
-        let targetFontMode: 'modern' | 'pixel' = 'modern';
-        let targetFontChoice = 'outfit';
+        let targetHeadingFont = 'outfit';
+        let targetAccentFont = 'space-grotesk';
 
         if (rawTheme.includes('::')) {
           const parts = rawTheme.split('::');
           targetTheme = parts[0] || 'sapphire-glow';
           for (let i = 1; i < parts.length; i++) {
             const p = parts[i];
-            if (p.startsWith('font:')) {
-              targetFontChoice = p.replace('font:', '');
-            } else if (p === 'pixel' || p === 'modern') {
-              targetFontMode = p;
+            if (p.startsWith('h:')) {
+              targetHeadingFont = p.replace('h:', '');
+            } else if (p.startsWith('a:')) {
+              targetAccentFont = p.replace('a:', '');
+            } else if (p.startsWith('font:')) {
+              targetHeadingFont = p.replace('font:', '');
+            } else if (p === 'pixel') {
+              targetAccentFont = 'silkscreen';
+            } else if (p === 'modern') {
+              targetAccentFont = 'space-grotesk';
             }
           }
         } else {
@@ -282,17 +305,10 @@ export const ThemeProvider: React.FC<{ children: ReactNode }> = ({ children }) =
 
         if (THEMES[targetTheme]) {
           setThemeId(targetTheme);
-          try {
-            localStorage.setItem('amit_site_theme', targetTheme);
-          } catch {}
         }
 
-        setFontMode(targetFontMode);
-        setFontChoice(targetFontChoice);
-        try {
-          localStorage.setItem('amit_font_mode', targetFontMode);
-          localStorage.setItem('amit_font_choice', targetFontChoice);
-        } catch {}
+        setHeadingFont(targetHeadingFont);
+        setAccentFont(targetAccentFont);
       }
     } catch {
       // Fallback preserves initial synchronous state
@@ -304,33 +320,25 @@ export const ThemeProvider: React.FC<{ children: ReactNode }> = ({ children }) =
   }, []);
 
   const currentTheme = THEMES[themeId] || THEMES['sapphire-glow'];
+  const fontMode: 'modern' | 'pixel' = (accentFont === 'silkscreen' || accentFont === 'vt323' || accentFont === 'press-start') ? 'pixel' : 'modern';
 
   return (
     <ThemeContext.Provider
       value={{
         theme: currentTheme,
         setThemeById: (id: string) => {
-          if (THEMES[id]) {
-            setThemeId(id);
-            try {
-              localStorage.setItem('amit_site_theme', id);
-            } catch {}
-          }
+          if (THEMES[id]) setThemeId(id);
         },
+        headingFont,
+        setHeadingFont,
+        accentFont,
+        setAccentFont,
         fontMode,
         setFontMode: (mode: 'modern' | 'pixel') => {
-          setFontMode(mode);
-          try {
-            localStorage.setItem('amit_font_mode', mode);
-          } catch {}
+          setAccentFont(mode === 'pixel' ? 'silkscreen' : 'space-grotesk');
         },
-        fontChoice,
-        setFontChoice: (choice: string) => {
-          setFontChoice(choice);
-          try {
-            localStorage.setItem('amit_font_choice', choice);
-          } catch {}
-        },
+        fontChoice: headingFont,
+        setFontChoice: setHeadingFont,
         siteSettings,
         refreshSettings,
       }}

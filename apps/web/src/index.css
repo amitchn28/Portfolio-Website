@@ -75,19 +75,93 @@ body {
     linear-gradient(to bottom, rgba(6, 182, 212, 0.035) 1px, transparent 1px);
 }
 
-/* Dynamic Accent Typography System (Configurable in Admin CMS) */
-/* Mode A: Normalized Modern Tech (Default) */
+/* ========================================================================= */
+/* 1. Main Website & Heading Typography (Configurable in Admin CMS)          */
+/* Controls: Hero Title, Section Headings, Project Titles, Showcase Words   */
+/* ========================================================================= */
+
+.font-heading,
+.font-display,
+.font-showcase,
+[data-heading-font="outfit"] .font-heading,
+[data-heading-font="outfit"] .font-display,
+[data-heading-font="outfit"] .font-showcase,
+[data-font-choice="outfit"] .font-heading,
+[data-font-choice="outfit"] .font-showcase {
+  font-family: 'Outfit', 'Plus Jakarta Sans', sans-serif !important;
+}
+
+[data-heading-font="space-grotesk"] .font-heading,
+[data-heading-font="space-grotesk"] .font-display,
+[data-heading-font="space-grotesk"] .font-showcase,
+[data-font-choice="space-grotesk"] .font-heading,
+[data-font-choice="space-grotesk"] .font-showcase {
+  font-family: 'Space Grotesk', sans-serif !important;
+}
+
+[data-heading-font="syne"] .font-heading,
+[data-heading-font="syne"] .font-display,
+[data-heading-font="syne"] .font-showcase,
+[data-font-choice="syne"] .font-heading,
+[data-font-choice="syne"] .font-showcase {
+  font-family: 'Syne', sans-serif !important;
+}
+
+[data-heading-font="plus-jakarta-sans"] .font-heading,
+[data-heading-font="plus-jakarta-sans"] .font-display,
+[data-heading-font="plus-jakarta-sans"] .font-showcase {
+  font-family: 'Plus Jakarta Sans', 'Inter', sans-serif !important;
+}
+
+[data-heading-font="sora"] .font-heading,
+[data-heading-font="sora"] .font-display,
+[data-heading-font="sora"] .font-showcase {
+  font-family: 'Sora', sans-serif !important;
+}
+
+[data-heading-font="orbitron"] .font-heading,
+[data-heading-font="orbitron"] .font-display,
+[data-heading-font="orbitron"] .font-showcase {
+  font-family: 'Orbitron', sans-serif !important;
+}
+
+[data-heading-font="jetbrains-mono"] .font-heading,
+[data-heading-font="jetbrains-mono"] .font-display,
+[data-heading-font="jetbrains-mono"] .font-showcase,
+[data-font-choice="jetbrains-mono"] .font-heading,
+[data-font-choice="jetbrains-mono"] .font-showcase {
+  font-family: 'JetBrains Mono', monospace !important;
+}
+
+[data-heading-font="inter"] .font-heading,
+[data-heading-font="inter"] .font-display,
+[data-heading-font="inter"] .font-showcase,
+[data-font-choice="inter"] .font-heading,
+[data-font-choice="inter"] .font-showcase {
+  font-family: 'Inter', sans-serif !important;
+}
+
+/* ========================================================================= */
+/* 2. Accent & Badge Typography (The Pixelated Area Texts)                   */
+/* Controls: Section Badge Pills, Hero Tech Badges, Handles, Highlight Stats  */
+/* ========================================================================= */
+
 .pixel-text,
 .font-pixel,
 .font-tech,
+[data-accent-font="space-grotesk"] .pixel-text,
+[data-accent-font="space-grotesk"] .font-pixel,
+[data-accent-font="space-grotesk"] .font-tech,
 [data-font-mode="modern"] .pixel-text,
 [data-font-mode="modern"] .font-pixel,
 [data-font-mode="modern"] .font-tech {
-  font-family: 'Space Grotesk', 'JetBrains Mono', sans-serif;
+  font-family: 'Space Grotesk', 'JetBrains Mono', sans-serif !important;
   letter-spacing: 0.05em;
 }
 
-/* Mode B: Retro Cyber Pixel (8-Bit Silkscreen retro aesthetic) */
+[data-accent-font="silkscreen"] .pixel-text,
+[data-accent-font="silkscreen"] .font-pixel,
+[data-accent-font="silkscreen"] .font-tech,
 [data-font-mode="pixel"] .pixel-text,
 [data-font-mode="pixel"] .font-pixel,
 [data-font-mode="pixel"] .font-tech {
@@ -95,36 +169,27 @@ body {
   letter-spacing: 0.08em !important;
 }
 
-/* Dynamic Heading & Showcase Typography Choice (Configurable in Admin CMS) */
-[data-font-choice="outfit"] .font-heading,
-[data-font-choice="outfit"] .font-showcase {
-  font-family: 'Outfit', 'Plus Jakarta Sans', sans-serif !important;
+[data-accent-font="vt323"] .pixel-text,
+[data-accent-font="vt323"] .font-pixel,
+[data-accent-font="vt323"] .font-tech {
+  font-family: 'VT323', monospace !important;
+  letter-spacing: 0.12em !important;
+  font-size: 1.15em;
 }
 
-[data-font-choice="space-grotesk"] .font-heading,
-[data-font-choice="space-grotesk"] .font-showcase {
-  font-family: 'Space Grotesk', sans-serif !important;
+[data-accent-font="press-start"] .pixel-text,
+[data-accent-font="press-start"] .font-pixel,
+[data-accent-font="press-start"] .font-tech {
+  font-family: 'Press Start 2P', monospace !important;
+  letter-spacing: 0.06em !important;
+  font-size: 0.8em;
 }
 
-[data-font-choice="syne"] .font-heading,
-[data-font-choice="syne"] .font-showcase {
-  font-family: 'Syne', sans-serif !important;
-}
-
-[data-font-choice="silkscreen"] .font-heading,
-[data-font-choice="silkscreen"] .font-showcase {
-  font-family: 'Silkscreen', monospace !important;
-  letter-spacing: 0.04em !important;
-}
-
-[data-font-choice="jetbrains-mono"] .font-heading,
-[data-font-choice="jetbrains-mono"] .font-showcase {
+[data-accent-font="jetbrains-mono"] .pixel-text,
+[data-accent-font="jetbrains-mono"] .font-pixel,
+[data-accent-font="jetbrains-mono"] .font-tech {
   font-family: 'JetBrains Mono', monospace !important;
-}
-
-[data-font-choice="inter"] .font-heading,
-[data-font-choice="inter"] .font-showcase {
-  font-family: 'Inter', sans-serif !important;
+  letter-spacing: 0.05em;
 }
 
 /* Hide scrollbar for Chrome, Safari, Edge, and Firefox */

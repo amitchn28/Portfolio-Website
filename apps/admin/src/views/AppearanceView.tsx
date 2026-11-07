@@ -8,8 +8,8 @@ export const AppearanceView: React.FC = () => {
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
 
-  const [fontMode, setFontMode] = useState<'modern' | 'pixel'>('modern');
-  const [fontChoice, setFontChoice] = useState<string>('outfit');
+  const [headingFont, setHeadingFont] = useState<string>('outfit');
+  const [accentFont, setAccentFont] = useState<string>('space-grotesk');
 
   const [form, setForm] = useState({
     siteName: 'Amit Chauhan',
@@ -27,18 +27,24 @@ export const AppearanceView: React.FC = () => {
       if (data?.website) {
         const rawTheme = data.website.theme || 'sapphire-glow';
         let activeTheme = 'sapphire-glow';
-        let activeFontMode: 'modern' | 'pixel' = 'modern';
-        let activeFontChoice = 'outfit';
+        let activeHeadingFont = 'outfit';
+        let activeAccentFont = 'space-grotesk';
 
         if (rawTheme.includes('::')) {
           const parts = rawTheme.split('::');
           activeTheme = parts[0] || 'sapphire-glow';
           for (let i = 1; i < parts.length; i++) {
             const p = parts[i];
-            if (p.startsWith('font:')) {
-              activeFontChoice = p.replace('font:', '');
-            } else if (p === 'pixel' || p === 'modern') {
-              activeFontMode = p;
+            if (p.startsWith('h:')) {
+              activeHeadingFont = p.replace('h:', '');
+            } else if (p.startsWith('a:')) {
+              activeAccentFont = p.replace('a:', '');
+            } else if (p.startsWith('font:')) {
+              activeHeadingFont = p.replace('font:', '');
+            } else if (p === 'pixel') {
+              activeAccentFont = 'silkscreen';
+            } else if (p === 'modern') {
+              activeAccentFont = 'space-grotesk';
             }
           }
         } else {
@@ -53,8 +59,8 @@ export const AppearanceView: React.FC = () => {
           allowMessages: data.website.allowMessages !== false,
           theme: activeTheme,
         });
-        setFontMode(activeFontMode);
-        setFontChoice(activeFontChoice);
+        setHeadingFont(activeHeadingFont);
+        setAccentFont(activeAccentFont);
       }
     } catch (err: any) {
       error(err.message || 'Failed to load website settings');
@@ -71,7 +77,7 @@ export const AppearanceView: React.FC = () => {
     e.preventDefault();
     setSaving(true);
     try {
-      const themePayload = `${form.theme}::font:${fontChoice}::${fontMode}`;
+      const themePayload = `${form.theme}::h:${headingFont}::a:${accentFont}`;
       await adminApi.updateWebsiteSettings({
         ...form,
         theme: themePayload,
@@ -342,168 +348,317 @@ export const AppearanceView: React.FC = () => {
             </div>
           </div>
 
-          {/* Heading & Showcase Font Family Switcher */}
+          {/* 1. Main Website & Heading Typography */}
           <div className="p-6 rounded-2xl bg-space-950/90 border border-slate-800 space-y-4">
-            <div className="flex items-center justify-between">
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
               <div>
                 <h3 className="text-sm font-bold text-white font-cyber uppercase tracking-wider flex items-center gap-2">
-                  <span>✦ Showcase &amp; Heading Font Family</span>
+                  <span>✦ 1. Main Website &amp; Heading Typography</span>
                   <span className="text-[10px] font-mono px-2 py-0.5 rounded-full bg-cyan-500/10 text-cyan-300 border border-cyan-500/20">
-                    Live Typography Picker
+                    8 Premium Fonts
                   </span>
                 </h3>
                 <p className="text-xs text-slate-400 mt-1">
-                  Choose the primary display font used for the giant rotating words (Developer, Programmer, Gamer, Coder) and main section titles.
+                  Controls the primary typographic identity across all key showcase and heading elements on your portfolio.
                 </p>
               </div>
             </div>
 
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 pt-1">
+            {/* Scope explanation banner */}
+            <div className="p-3.5 rounded-xl bg-purple-500/10 border border-purple-500/20 text-xs text-purple-200">
+              <strong className="text-purple-300 font-bold block mb-1">
+                ✦ Elements Changed by Main Typography:
+              </strong>
+              Hero Name (<span className="text-white font-semibold">Amit Chauhan</span>), 
+              Showcase Rotating Words (<span className="text-white font-semibold">Developer, Programmer, Gamer, Coder</span>), 
+              Main Section Headers (<span className="text-white font-semibold">About, Education, Projects, Skills, Profiles, Contact</span>), 
+              Project Titles, Card Titles, and Action Buttons.
+            </div>
+
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3.5 pt-1">
               {[
                 {
                   id: 'outfit',
-                  name: 'Outfit (Recommended)',
-                  tagline: 'Sleek, rounded-geometric modern display font',
-                  preview: 'DEVELOPER // CODER',
+                  name: 'Outfit',
+                  badge: 'DEFAULT',
+                  tagline: 'Sleek, modern rounded-geometric display font. Balanced and clean.',
+                  preview: 'AMIT CHAUHAN',
                   fontFamily: "'Outfit', sans-serif",
                 },
                 {
                   id: 'space-grotesk',
                   name: 'Space Grotesk',
-                  tagline: 'Futuristic high-tech cyber grotesque aesthetic',
-                  preview: 'DEVELOPER // CODER',
+                  badge: 'CYBER TECH',
+                  tagline: 'Futuristic high-tech cyber grotesque aesthetic with tech personality.',
+                  preview: 'AMIT CHAUHAN',
                   fontFamily: "'Space Grotesk', sans-serif",
                 },
                 {
                   id: 'syne',
                   name: 'Syne',
-                  tagline: 'Ultra-wide contemporary Awwwards agency style',
-                  preview: 'DEVELOPER // CODER',
+                  badge: 'AGENCY BOLD',
+                  tagline: 'Ultra-wide contemporary design agency style. High visual punch.',
+                  preview: 'AMIT CHAUHAN',
                   fontFamily: "'Syne', sans-serif",
                 },
                 {
-                  id: 'silkscreen',
-                  name: 'Silkscreen',
-                  tagline: 'Retro 8-bit arcade and cyberpunk pixel font',
-                  preview: 'DEVELOPER // CODER',
-                  fontFamily: "'Silkscreen', monospace",
+                  id: 'plus-jakarta-sans',
+                  name: 'Plus Jakarta Sans',
+                  badge: 'MODERN SAAS',
+                  tagline: 'Elite Silicon Valley SaaS aesthetic with balanced crisp geometry.',
+                  preview: 'AMIT CHAUHAN',
+                  fontFamily: "'Plus Jakarta Sans', sans-serif",
+                },
+                {
+                  id: 'sora',
+                  name: 'Sora',
+                  badge: 'FUTURIST',
+                  tagline: 'Precision futuristic geometric typeface with crisp modern character.',
+                  preview: 'AMIT CHAUHAN',
+                  fontFamily: "'Sora', sans-serif",
+                },
+                {
+                  id: 'orbitron',
+                  name: 'Orbitron',
+                  badge: 'SCI-FI MECHA',
+                  tagline: 'Aerospace and robotics futuristic lettering. Heavy sci-fi presence.',
+                  preview: 'AMIT CHAUHAN',
+                  fontFamily: "'Orbitron', sans-serif",
                 },
                 {
                   id: 'jetbrains-mono',
                   name: 'JetBrains Mono',
-                  tagline: 'Precision monospace code-editor style',
-                  preview: 'DEVELOPER // CODER',
+                  badge: 'ENGINEER CODE',
+                  tagline: 'Precision monospace code-editor font for true developer identity.',
+                  preview: 'AMIT CHAUHAN',
                   fontFamily: "'JetBrains Mono', monospace",
                 },
                 {
                   id: 'inter',
                   name: 'Inter',
-                  tagline: 'Clean, minimalist contemporary neutral sans',
-                  preview: 'DEVELOPER // CODER',
+                  badge: 'MINIMAL CLEAN',
+                  tagline: 'World-standard minimalist design system typography. Ultra-neutral.',
+                  preview: 'AMIT CHAUHAN',
                   fontFamily: "'Inter', sans-serif",
                 },
-              ].map((f) => (
-                <div
-                  key={f.id}
-                  onClick={() => setFontChoice(f.id)}
-                  className={`p-4 rounded-xl border cursor-pointer transition-all ${
-                    fontChoice === f.id
-                      ? 'border-cyan-400 bg-space-900 shadow-glow-card ring-1 ring-cyan-400/50'
-                      : 'border-slate-800 bg-space-900/40 opacity-70 hover:opacity-100 hover:border-slate-700'
-                  }`}
-                >
-                  <div className="flex items-center justify-between mb-1.5">
-                    <span className="text-xs font-bold text-white uppercase tracking-wider">
-                      {f.name}
-                    </span>
-                    {fontChoice === f.id && <Check className="w-4 h-4 text-cyan-400" />}
-                  </div>
-                  <p className="text-[11px] text-slate-400 leading-snug">
-                    {f.tagline}
-                  </p>
+              ].map((f) => {
+                const isSelected = headingFont === f.id;
+                return (
                   <div
-                    className="pt-3 text-xs sm:text-sm font-black tracking-wider text-cyan-300"
-                    style={{ fontFamily: f.fontFamily }}
+                    key={f.id}
+                    onClick={() => setHeadingFont(f.id)}
+                    className={`p-3.5 rounded-xl border cursor-pointer transition-all flex flex-col justify-between ${
+                      isSelected
+                        ? 'border-cyan-400 bg-space-900 shadow-glow-card ring-1 ring-cyan-400/50'
+                        : 'border-slate-800 bg-space-900/40 opacity-70 hover:opacity-100 hover:border-slate-700'
+                    }`}
                   >
-                    {f.preview}
+                    <div>
+                      <div className="flex items-center justify-between mb-1.5 gap-1">
+                        <span className="text-xs font-bold text-white tracking-wide truncate">
+                          {f.name}
+                        </span>
+                        <div className="flex items-center gap-1 shrink-0">
+                          <span className={`text-[9px] font-mono px-1.5 py-0.5 rounded ${
+                            f.badge === 'DEFAULT' ? 'bg-cyan-500/20 text-cyan-300 font-bold' : 'bg-slate-800 text-slate-300'
+                          }`}>
+                            {f.badge}
+                          </span>
+                          {isSelected && <Check className="w-3.5 h-3.5 text-cyan-400" />}
+                        </div>
+                      </div>
+                      <p className="text-[11px] text-slate-400 leading-snug line-clamp-2">
+                        {f.tagline}
+                      </p>
+                    </div>
+                    <div
+                      className="pt-3 text-xs sm:text-sm font-extrabold tracking-wider text-cyan-300 truncate"
+                      style={{ fontFamily: f.fontFamily }}
+                    >
+                      {f.preview}
+                    </div>
                   </div>
-                </div>
-              ))}
+                );
+              })}
             </div>
           </div>
 
-          {/* Accent Typography Style Switcher (Modern Tech vs Retro Cyber Pixel) */}
+          {/* 2. Accent & Badge Typography (The Pixelated Area Texts) */}
           <div className="p-6 rounded-2xl bg-space-950/90 border border-slate-800 space-y-4">
-            <div className="flex items-center justify-between">
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
               <div>
                 <h3 className="text-sm font-bold text-white font-cyber uppercase tracking-wider flex items-center gap-2">
-                  <span>Accent Typography Style</span>
+                  <span>✦ 2. Accent &amp; Badge Typography (The "Pixelated Area" Texts)</span>
                   <span className="text-[10px] font-mono px-2 py-0.5 rounded-full bg-purple-500/10 text-purple-300 border border-purple-500/20">
-                    Live Toggle
+                    Dual Defaults + Retro Styles
                   </span>
                 </h3>
                 <p className="text-xs text-slate-400 mt-1">
-                  Choose whether section badges, role indicators, and cyber labels appear in normalized modern tech font or 8-bit retro pixel font.
+                  Choose whether your badges, tags, and micro-labels appear in normalized modern tech font, authentic 8-bit retro pixel, or CRT terminal style.
                 </p>
               </div>
             </div>
 
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-1">
-              {/* Option 1: Modern Tech */}
-              <div
-                onClick={() => setFontMode('modern')}
-                className={`p-4 rounded-xl border cursor-pointer transition-all flex items-start gap-3.5 ${
-                  fontMode === 'modern'
-                    ? 'border-purple-500 bg-space-900 shadow-glow-card ring-1 ring-purple-500/50'
-                    : 'border-slate-800 bg-space-900/40 opacity-60 hover:opacity-100 hover:border-slate-700'
-                }`}
-              >
-                <div className={`w-4 h-4 rounded-full mt-0.5 border flex items-center justify-center shrink-0 ${
-                  fontMode === 'modern' ? 'border-purple-400 bg-purple-500' : 'border-slate-600'
-                }`}>
-                  {fontMode === 'modern' && <div className="w-1.5 h-1.5 rounded-full bg-white" />}
-                </div>
-                <div className="space-y-1">
-                  <div className="text-xs font-bold text-white uppercase tracking-wider">
-                    Normalized Modern Tech (Space Grotesk)
+            {/* Scope explanation banner */}
+            <div className="p-3.5 rounded-xl bg-cyan-500/10 border border-cyan-500/20 text-xs text-cyan-200">
+              <strong className="text-cyan-300 font-bold block mb-1">
+                ✦ Elements Changed by Accent Typography:
+              </strong>
+              Section Badge Pills (<span className="text-white font-semibold">ABOUT // PROFILE</span>, <span className="text-white font-semibold">PROJECTS // WORK</span>, <span className="text-white font-semibold">SKILLS // TECH</span>), 
+              Hero Role Badges (<span className="text-white font-semibold">SOFTWARE ENGINEER • AI DEVELOPER</span>, <span className="text-white font-semibold">CS STUDENT</span>), 
+              Handle Badges (<span className="text-white font-semibold">@amitchauhan</span>), 
+              Education &amp; Work Highlight Labels (<span className="text-white font-semibold">DEGREE</span>, <span className="text-white font-semibold">COLLEGE</span>, <span className="text-white font-semibold">MAJOR DOMAIN</span>, <span className="text-white font-semibold">SPECIALIZATION</span>), and Cybernetic Micro-Labels.
+            </div>
+
+            {/* The 2 Primary Defaults (Featured Prominently) */}
+            <div className="space-y-2 pt-1">
+              <div className="text-[11px] font-mono font-bold text-slate-300 uppercase tracking-wider">
+                Primary Defaults (Switch anytime between Normalized Normal &amp; 8-Bit Pixel):
+              </div>
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                {/* Default 1: Normalized Modern Tech */}
+                <div
+                  onClick={() => setAccentFont('space-grotesk')}
+                  className={`p-4 rounded-xl border cursor-pointer transition-all flex items-start gap-3.5 ${
+                    accentFont === 'space-grotesk'
+                      ? 'border-purple-500 bg-space-900 shadow-glow-card ring-1 ring-purple-500/50'
+                      : 'border-slate-800 bg-space-900/40 opacity-70 hover:opacity-100 hover:border-slate-700'
+                  }`}
+                >
+                  <div className={`w-4 h-4 rounded-full mt-0.5 border flex items-center justify-center shrink-0 ${
+                    accentFont === 'space-grotesk' ? 'border-purple-400 bg-purple-500' : 'border-slate-600'
+                  }`}>
+                    {accentFont === 'space-grotesk' && <div className="w-1.5 h-1.5 rounded-full bg-white" />}
                   </div>
-                  <p className="text-[11px] text-slate-400 font-sans">
-                    Clean, elegant geometric typography matching modern developer aesthetics.
-                  </p>
-                  <div className="pt-2 text-[11px] text-cyan-300 font-mono font-semibold tracking-wider">
-                    PREVIEW: SOFTWARE ENGINEER // CS STUDENT
+                  <div className="space-y-1">
+                    <div className="flex items-center gap-2">
+                      <span className="text-xs font-bold text-white uppercase tracking-wider">
+                        Normalized Modern Tech (Space Grotesk)
+                      </span>
+                      <span className="text-[9px] font-mono px-1.5 py-0.5 rounded bg-purple-500/20 text-purple-300 font-bold">
+                        DEFAULT NORMAL
+                      </span>
+                    </div>
+                    <p className="text-[11px] text-slate-400 font-sans">
+                      Clean, elegant geometric typography normalizing all badges and cyber labels. Ultra-readable with no pixelation.
+                    </p>
+                    <div 
+                      className="pt-2 text-xs text-cyan-300 font-semibold tracking-wider"
+                      style={{ fontFamily: "'Space Grotesk', sans-serif" }}
+                    >
+                      PREVIEW: SOFTWARE ENGINEER // CS STUDENT
+                    </div>
+                  </div>
+                </div>
+
+                {/* Default 2: Retro Cyber Pixel */}
+                <div
+                  onClick={() => setAccentFont('silkscreen')}
+                  className={`p-4 rounded-xl border cursor-pointer transition-all flex items-start gap-3.5 ${
+                    accentFont === 'silkscreen'
+                      ? 'border-amber-400 bg-space-900 shadow-glow-card ring-1 ring-amber-400/50'
+                      : 'border-slate-800 bg-space-900/40 opacity-70 hover:opacity-100 hover:border-slate-700'
+                  }`}
+                >
+                  <div className={`w-4 h-4 rounded-full mt-0.5 border flex items-center justify-center shrink-0 ${
+                    accentFont === 'silkscreen' ? 'border-amber-400 bg-amber-500' : 'border-slate-600'
+                  }`}>
+                    {accentFont === 'silkscreen' && <div className="w-1.5 h-1.5 rounded-full bg-white" />}
+                  </div>
+                  <div className="space-y-1">
+                    <div className="flex items-center gap-2">
+                      <span className="text-xs font-bold text-amber-300 uppercase tracking-wider">
+                        Retro Cyber Pixel (Silkscreen 8-Bit)
+                      </span>
+                      <span className="text-[9px] font-mono px-1.5 py-0.5 rounded bg-amber-500/20 text-amber-300 font-bold">
+                        DEFAULT RETRO PIXEL
+                      </span>
+                    </div>
+                    <p className="text-[11px] text-slate-400 font-sans">
+                      The original nostalgic cyberpunk pixelated lettering for all badge pills and cyber labels across the webpage.
+                    </p>
+                    <div 
+                      className="pt-2 text-[11px] text-amber-300 tracking-wider"
+                      style={{ fontFamily: "'Silkscreen', monospace" }}
+                    >
+                      PREVIEW: SOFTWARE ENGINEER // CS STUDENT
+                    </div>
                   </div>
                 </div>
               </div>
+            </div>
 
-              {/* Option 2: Retro Cyber Pixel */}
-              <div
-                onClick={() => setFontMode('pixel')}
-                className={`p-4 rounded-xl border cursor-pointer transition-all flex items-start gap-3.5 ${
-                  fontMode === 'pixel'
-                    ? 'border-amber-400 bg-space-900 shadow-glow-card ring-1 ring-amber-400/50'
-                    : 'border-slate-800 bg-space-900/40 opacity-60 hover:opacity-100 hover:border-slate-700'
-                }`}
-              >
-                <div className={`w-4 h-4 rounded-full mt-0.5 border flex items-center justify-center shrink-0 ${
-                  fontMode === 'pixel' ? 'border-amber-400 bg-amber-500' : 'border-slate-600'
-                }`}>
-                  {fontMode === 'pixel' && <div className="w-1.5 h-1.5 rounded-full bg-white" />}
-                </div>
-                <div className="space-y-1">
-                  <div className="text-xs font-bold text-amber-300 font-mono uppercase tracking-wider">
-                    Retro Cyber Pixel (Silkscreen 8-Bit)
-                  </div>
-                  <p className="text-[11px] text-slate-400 font-sans">
-                    Nostalgic cyberpunk pixelated lettering for badges and chosen key headers.
-                  </p>
-                  <div 
-                    className="pt-2 text-[11px] text-amber-300 tracking-wider"
-                    style={{ fontFamily: "'Silkscreen', monospace" }}
-                  >
-                    PREVIEW: SOFTWARE ENGINEER // CS STUDENT
-                  </div>
-                </div>
+            {/* Additional Retro & Terminal Typography Options */}
+            <div className="space-y-2 pt-2">
+              <div className="text-[11px] font-mono font-bold text-slate-300 uppercase tracking-wider">
+                Additional Retro, Terminal &amp; Code Accents:
+              </div>
+              <div className="grid grid-cols-1 sm:grid-cols-3 gap-3.5">
+                {[
+                  {
+                    id: 'vt323',
+                    name: 'VT323',
+                    badge: 'CRT TERMINAL',
+                    tagline: 'Classic vintage green-screen mainframe CRT matrix terminal lettering.',
+                    preview: 'SOFTWARE ENGINEER // CS STUDENT',
+                    fontFamily: "'VT323', monospace",
+                    fontSize: 'text-sm',
+                  },
+                  {
+                    id: 'press-start',
+                    name: 'Press Start 2P',
+                    badge: 'ARCADE GAMING',
+                    tagline: 'Authentic 1980s coin-op arcade machine pixel lettering.',
+                    preview: 'DEV // CODER',
+                    fontFamily: "'Press Start 2P', monospace",
+                    fontSize: 'text-[10px]',
+                  },
+                  {
+                    id: 'jetbrains-mono',
+                    name: 'JetBrains Mono',
+                    badge: 'DEV CODE',
+                    tagline: 'Crisp developer monospace tags for engineering minimalism.',
+                    preview: 'SOFTWARE ENGINEER // CS STUDENT',
+                    fontFamily: "'JetBrains Mono', monospace",
+                    fontSize: 'text-xs',
+                  },
+                ].map((item) => {
+                  const isSelected = accentFont === item.id;
+                  return (
+                    <div
+                      key={item.id}
+                      onClick={() => setAccentFont(item.id)}
+                      className={`p-3.5 rounded-xl border cursor-pointer transition-all flex flex-col justify-between ${
+                        isSelected
+                          ? 'border-emerald-400 bg-space-900 shadow-glow-card ring-1 ring-emerald-400/50'
+                          : 'border-slate-800 bg-space-900/40 opacity-70 hover:opacity-100 hover:border-slate-700'
+                      }`}
+                    >
+                      <div>
+                        <div className="flex items-center justify-between mb-1.5">
+                          <span className="text-xs font-bold text-white tracking-wide">
+                            {item.name}
+                          </span>
+                          <div className="flex items-center gap-1">
+                            <span className="text-[9px] font-mono px-1.5 py-0.5 rounded bg-slate-800 text-slate-300">
+                              {item.badge}
+                            </span>
+                            {isSelected && <Check className="w-3.5 h-3.5 text-emerald-400" />}
+                          </div>
+                        </div>
+                        <p className="text-[11px] text-slate-400 leading-snug">
+                          {item.tagline}
+                        </p>
+                      </div>
+                      <div
+                        className={`pt-3 ${item.fontSize} font-bold tracking-wider text-emerald-300 truncate`}
+                        style={{ fontFamily: item.fontFamily }}
+                      >
+                        {item.preview}
+                      </div>
+                    </div>
+                  );
+                })}
               </div>
             </div>
           </div>

@@ -67,18 +67,20 @@
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600;700&family=Orbitron:wght@700;800;900&family=Outfit:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@500;600;700&family=Silkscreen:wght@400;700&family=Space+Grotesk:wght@500;600;700&family=Syne:wght@700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600;700&family=Orbitron:wght@700;800;900&family=Outfit:wght@400;500;600;700;800;900&family=Plus+Jakarta+Sans:wght@500;600;700;800&family=Press+Start+2P&family=Silkscreen:wght@400;700&family=Sora:wght@600;700;800&family=Space+Grotesk:wght@500;600;700&family=Syne:wght@700;800&family=VT323&display=swap" rel="stylesheet">
 
     <!-- Zero-Flash Immediate Theme & Typography Initializer -->
     <script>
       (function() {
         try {
           var t = localStorage.getItem('amit_site_theme') || 'sapphire-glow';
-          var f = localStorage.getItem('amit_font_mode') || 'modern';
-          var fc = localStorage.getItem('amit_font_choice') || 'outfit';
+          var hf = localStorage.getItem('amit_heading_font') || localStorage.getItem('amit_font_choice') || 'outfit';
+          var af = localStorage.getItem('amit_accent_font') || (localStorage.getItem('amit_font_mode') === 'pixel' ? 'silkscreen' : 'space-grotesk');
           document.documentElement.setAttribute('data-theme', t);
-          document.documentElement.setAttribute('data-font-mode', f);
-          document.documentElement.setAttribute('data-font-choice', fc);
+          document.documentElement.setAttribute('data-heading-font', hf);
+          document.documentElement.setAttribute('data-accent-font', af);
+          document.documentElement.setAttribute('data-font-mode', af === 'silkscreen' || af === 'vt323' || af === 'press-start' ? 'pixel' : 'modern');
+          document.documentElement.setAttribute('data-font-choice', hf);
         } catch(e) {}
       })();
     </script>
