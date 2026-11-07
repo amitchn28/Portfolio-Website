@@ -54,9 +54,6 @@ export const Education: React.FC<EducationProps> = ({ educationList }) => {
                 {/* Top Glowing Dynamic Line */}
                 <div className={`absolute top-0 left-0 right-0 h-1 bg-gradient-to-r ${theme.cardTopLine}`}></div>
 
-                {/* Left Vertical Accent Line */}
-                <div className={`absolute top-0 left-0 bottom-0 w-1.5 bg-gradient-to-b ${theme.cardTopLine}`}></div>
-
                 <div className="flex flex-col md:flex-row md:items-start justify-between gap-6">
                   <div className="space-y-3.5 flex-1">
                     {/* Status Pill & Academic Years */}
