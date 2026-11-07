@@ -72,10 +72,11 @@ body {
     linear-gradient(to bottom, rgba(6, 182, 212, 0.035) 1px, transparent 1px);
 }
 
-/* Retro-Tech Pixel Accent Typography */
+/* High-Tech Modern Accent Typography (Normalized from 8-bit pixel) */
 .pixel-text {
-  font-family: 'Silkscreen', monospace;
-  letter-spacing: 0.08em;
+  font-family: 'Space Grotesk', 'JetBrains Mono', monospace;
+  letter-spacing: 0.05em;
+  font-weight: 600;
 }
 
 /* Hide scrollbar for Chrome, Safari, Edge, and Firefox */

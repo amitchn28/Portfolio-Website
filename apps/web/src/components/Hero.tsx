@@ -73,7 +73,7 @@ export const Hero: React.FC<HeroProps> = ({ profileData }) => {
           className={`inline-flex items-center gap-2 px-4 py-1.5 rounded-full ${theme.badgeBg} border ${theme.badgeBorder} text-xs ${theme.badgeText} backdrop-blur-md shadow-sm`}
         >
           <Sparkles className="w-3.5 h-3.5" />
-          <span className="font-pixel text-[10px] sm:text-xs tracking-wider uppercase">
+          <span className="font-tech text-xs tracking-wider uppercase font-semibold">
             {(profileData?.currentStatus || 'CS STUDENT')
               .replace(/\s*[•&bull;\-–—/|]?\s*fourth\s*year/gi, '')
               .replace(/fourth\s*year/gi, '')
@@ -97,7 +97,7 @@ export const Hero: React.FC<HeroProps> = ({ profileData }) => {
           </h1>
 
           <div className="inline-block pt-1">
-            <span className={`font-pixel text-xs sm:text-sm ${theme.headerAccent} tracking-wider`}>
+            <span className={`font-tech text-xs sm:text-sm ${theme.headerAccent} tracking-wider font-semibold`}>
               SOFTWARE ENGINEER &bull; AI DEVELOPER
             </span>
           </div>
@@ -157,7 +157,7 @@ export const Hero: React.FC<HeroProps> = ({ profileData }) => {
           className="flex items-center justify-center pt-3"
         >
           <div className="inline-flex items-center gap-2.5 px-4 py-1.5 rounded-full bg-space-900/90 border border-slate-800 backdrop-blur-md shadow-sm">
-            <span className="font-pixel text-[10px] text-slate-500 tracking-wider">
+            <span className="font-tech text-xs text-slate-400 font-semibold tracking-wider">
               CONNECT:
             </span>
             <a

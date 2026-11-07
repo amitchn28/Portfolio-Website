@@ -50,7 +50,7 @@ export const Profiles: React.FC<ProfilesProps> = ({ profileData, socialsList }) 
         </div>
       </motion.div>
 
-      {/* Retro-Tech Handle */}
+      {/* Modern Developer Handle */}
       <motion.div
         initial={{ opacity: 0, y: 10 }}
         whileInView={{ opacity: 1, y: 0 }}
@@ -58,7 +58,7 @@ export const Profiles: React.FC<ProfilesProps> = ({ profileData, socialsList }) 
         transition={{ duration: 0.5, delay: 0.1 }}
         className="mb-8"
       >
-        <span className="font-pixel text-xs sm:text-sm text-cyan-400 tracking-wider">
+        <span className="font-mono text-xs sm:text-sm text-cyan-400 tracking-wider font-semibold">
           @{profileData?.name ? profileData.name.replace(/\s+/g, '').toUpperCase() : 'AMITCHAUHAN'}
         </span>
       </motion.div>

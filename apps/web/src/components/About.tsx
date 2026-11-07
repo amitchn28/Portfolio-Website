@@ -1,5 +1,5 @@
-import React from 'react';
-import { motion } from 'framer-motion';
+import React, { useState, useEffect } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
 import { useTheme } from '../context/ThemeContext';
 import { 
   GraduationCap, 
@@ -12,9 +12,20 @@ interface AboutProps {
   profileData: any;
 }
 
+const ROLES = ['Programmer', 'Gamer', 'Coder'];
+
 export const About: React.FC<AboutProps> = ({ profileData }) => {
   const { theme } = useTheme();
   const bio = profileData?.fullBio;
+  const [roleIndex, setRoleIndex] = useState(0);
+
+  // Smoothly rotate between Programmer -> Gamer -> Coder
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setRoleIndex((prev) => (prev + 1) % ROLES.length);
+    }, 2500);
+    return () => clearInterval(timer);
+  }, []);
 
   return (
     <section id="about" className="py-20 px-4 sm:px-6 max-w-5xl mx-auto relative scroll-mt-28">
@@ -24,11 +35,11 @@ export const About: React.FC<AboutProps> = ({ profileData }) => {
         whileInView={{ opacity: 1, y: 0 }}
         viewport={{ once: true }}
         transition={{ duration: 0.6 }}
-        className="text-center mb-12"
+        className="text-center mb-6"
       >
         <div className={`inline-flex items-center gap-2 px-3 py-1 rounded-full ${theme.badgeBg} border ${theme.badgeBorder} mb-3`}>
           <span className="w-1.5 h-1.5 rounded-full bg-current animate-pulse"></span>
-          <span className={`font-pixel text-[10px] sm:text-[11px] ${theme.badgeText} tracking-wider`}>
+          <span className={`font-tech text-xs font-semibold ${theme.badgeText} tracking-wider uppercase`}>
             ABOUT // PROFILE
           </span>
         </div>
@@ -36,6 +47,33 @@ export const About: React.FC<AboutProps> = ({ profileData }) => {
           About Me — <span className={`bg-clip-text text-transparent bg-gradient-to-r ${theme.primaryGradient}`}>Behind The Code</span>
         </h2>
         <div className={`h-0.5 w-16 bg-gradient-to-r ${theme.cardTopLine} rounded-full mx-auto mt-3`}></div>
+      </motion.div>
+
+      {/* Unique Dynamic Handwritten Role Ribbon (Programmer -> Gamer -> Coder) */}
+      <motion.div
+        initial={{ opacity: 0, scale: 0.95 }}
+        whileInView={{ opacity: 1, scale: 1 }}
+        viewport={{ once: true }}
+        transition={{ duration: 0.6 }}
+        className="flex items-center justify-center gap-3 mb-12 text-center"
+      >
+        <span className="text-xs sm:text-sm font-tech text-slate-400 uppercase tracking-widest font-medium">
+          Driven by passion as a
+        </span>
+        <div className="relative inline-flex items-center justify-center min-w-[140px] sm:min-w-[170px] h-10 sm:h-12 px-4 py-1 rounded-2xl bg-slate-900/90 border border-amber-500/35 backdrop-blur-xl shadow-xl shadow-amber-500/10">
+          <AnimatePresence mode="wait">
+            <motion.span
+              key={roleIndex}
+              initial={{ y: 14, opacity: 0, rotate: -4, scale: 0.9 }}
+              animate={{ y: 0, opacity: 1, rotate: 0, scale: 1 }}
+              exit={{ y: -14, opacity: 0, rotate: 4, scale: 0.9 }}
+              transition={{ duration: 0.35, ease: 'easeOut' }}
+              className="font-handwriting text-2xl sm:text-3xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-amber-400 via-orange-400 to-amber-300 drop-shadow-[0_0_12px_rgba(245,158,11,0.5)] select-none"
+            >
+              {ROLES[roleIndex]}
+            </motion.span>
+          </AnimatePresence>
+        </div>
       </motion.div>
 
       {/* Main About Card with Glowing Border Line */}

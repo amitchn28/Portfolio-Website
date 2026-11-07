@@ -30,7 +30,8 @@ export default {
         display: ['Outfit', 'Plus Jakarta Sans', 'sans-serif'],
         tech: ['Space Grotesk', 'sans-serif'],
         cyber: ['Space Grotesk', 'sans-serif'],
-        pixel: ['Silkscreen', 'monospace'],
+        pixel: ['Space Grotesk', 'JetBrains Mono', 'sans-serif'],
+        handwriting: ['Caveat', 'cursive'],
         mono: ['JetBrains Mono', 'Fira Code', 'monospace'],
       },
       boxShadow: {

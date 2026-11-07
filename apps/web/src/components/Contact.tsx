@@ -68,7 +68,7 @@ export const Contact: React.FC = () => {
       >
         <div className={`inline-flex items-center gap-2 px-3 py-1 rounded-full ${theme.badgeBg} border ${theme.badgeBorder} mb-3`}>
           <span className="w-1.5 h-1.5 rounded-full bg-current animate-pulse"></span>
-          <span className={`font-pixel text-[10px] sm:text-[11px] ${theme.badgeText} tracking-wider`}>
+          <span className={`font-tech text-xs font-semibold ${theme.badgeText} tracking-wider uppercase`}>
             CONTACT // INBOX
           </span>
         </div>

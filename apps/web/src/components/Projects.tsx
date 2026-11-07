@@ -38,7 +38,7 @@ export const Projects: React.FC<ProjectsProps> = ({ projectsList }) => {
       >
         <div className={`inline-flex items-center gap-2 px-3 py-1 rounded-full ${theme.badgeBg} border ${theme.badgeBorder} mb-3`}>
           <span className="w-1.5 h-1.5 rounded-full bg-current animate-pulse"></span>
-          <span className={`font-pixel text-[10px] sm:text-[11px] ${theme.badgeText} tracking-wider`}>
+          <span className={`font-tech text-xs font-semibold ${theme.badgeText} tracking-wider uppercase`}>
             PROJECTS // SHOWCASE
           </span>
         </div>
@@ -78,7 +78,7 @@ export const Projects: React.FC<ProjectsProps> = ({ projectsList }) => {
               </span>
             </div>
 
-            <span className="font-pixel text-[10px] text-teal-400 tracking-wider uppercase flex items-center gap-1.5">
+            <span className="font-tech text-xs text-teal-400 tracking-wider uppercase font-semibold flex items-center gap-1.5">
               <span className="w-1.5 h-1.5 rounded-full bg-teal-400 animate-pulse"></span>
               CURRENT MAJOR PROJECT &bull; IN-PROGRESS
             </span>
@@ -209,7 +209,7 @@ export const Projects: React.FC<ProjectsProps> = ({ projectsList }) => {
                   {project.category || 'Project'}
                 </span>
 
-                <span className="font-pixel text-[10px] tracking-wider text-teal-400">
+                <span className="font-tech text-xs tracking-wider text-teal-400 font-semibold">
                   {project.status === 'COMPLETED' ? 'COMPLETED' : 'IN-PROGRESS'}
                 </span>
               </div>
