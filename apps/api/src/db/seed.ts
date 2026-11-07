@@ -9,7 +9,10 @@ dotenv.config({ path: path.resolve(__dirname, '../../.env') });
 const prisma = new PrismaClient();
 
 async function main() {
-  await ensureDatabaseRunning();
+  const isLocalDb = (process.env.DATABASE_URL || '').includes('localhost') || (process.env.DATABASE_URL || '').includes('127.0.0.1');
+  if (isLocalDb) {
+    await ensureDatabaseRunning();
+  }
   console.log('🌱 [Seed] Beginning database seeding...');
 
   // 1. Seed Administrator User

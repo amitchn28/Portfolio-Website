@@ -5,8 +5,10 @@ import prisma from './db/prisma';
 
 async function bootstrap() {
   try {
-    // 1. Ensure PostgreSQL is active
-    await ensureDatabaseRunning();
+    // 1. Ensure PostgreSQL is active (only for local dev with local database)
+    if (!env.IS_PROD && (env.DATABASE_URL.includes('localhost') || env.DATABASE_URL.includes('127.0.0.1'))) {
+      await ensureDatabaseRunning();
+    }
 
     // 2. Test database connection
     await prisma.$connect();
