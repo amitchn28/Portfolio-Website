@@ -26,7 +26,7 @@ const MOBILE_NAV_ITEMS: NavItem[] = [
 ];
 
 export const Navbar: React.FC = () => {
-  const { theme } = useTheme();
+  const { theme, siteSettings } = useTheme();
   const [activeSection, setActiveSection] = useState('home');
   const isClickScrolling = useRef(false);
 
@@ -95,7 +95,9 @@ export const Navbar: React.FC = () => {
   return (
     <>
       {/* ================= DESKTOP NAVIGATION: Top Centered Floating Spring Pill ================= */}
-      <header className="hidden sm:block fixed top-0 left-0 right-0 z-50 pointer-events-none transition-all duration-300">
+      <header className={`hidden sm:block fixed left-0 right-0 z-50 pointer-events-none transition-all duration-300 ${
+        siteSettings?.isMaintenance ? 'top-10' : 'top-0'
+      }`}>
         <div className="flex justify-center pt-5 px-6 pointer-events-auto">
           <nav className="nav-pill rounded-full px-6 py-2 flex items-center justify-center gap-2 transition-all duration-300 shadow-2xl">
             <div className="flex items-center gap-1.5 relative">

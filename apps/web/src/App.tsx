@@ -100,8 +100,8 @@ const PortfolioInner: React.FC = () => {
 
       {/* Maintenance Mode Banner (When toggled in Admin CMS) */}
       {siteSettings?.isMaintenance && (
-        <div className="relative z-50 bg-amber-500 text-slate-950 px-4 py-2 text-center text-xs font-bold font-mono tracking-wide shadow-md">
-          ⚠️ MAINTENANCE NOTICE: System upgrades in progress. Preview mode active.
+        <div className="fixed top-0 inset-x-0 z-[60] h-9 bg-gradient-to-r from-amber-500 via-orange-400 to-amber-500 text-slate-950 px-4 flex items-center justify-center text-xs font-bold font-mono tracking-wide shadow-lg border-b border-amber-600/40">
+          <span>⚠️ MAINTENANCE NOTICE: System upgrades in progress. Preview mode active.</span>
         </div>
       )}
 
@@ -109,7 +109,7 @@ const PortfolioInner: React.FC = () => {
       <Navbar />
 
       {/* Main Page Layout */}
-      <main className="relative z-10 space-y-12 sm:space-y-16">
+      <main className={`relative z-10 space-y-12 sm:space-y-16 ${siteSettings?.isMaintenance ? 'pt-8' : ''}`}>
         <Hero profileData={profile} onOpenResume={() => setResumeOpen(true)} />
         <About profileData={profile} />
         <Education educationList={education} />
