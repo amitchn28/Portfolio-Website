@@ -5,7 +5,4 @@ dist
 .env.*
 !.env.example
 postgres_data
-apps/web
-apps/admin
 *.log
-
