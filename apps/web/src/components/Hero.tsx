@@ -1,6 +1,7 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 import { useTheme } from '../context/ThemeContext';
+import { getAssetUrl } from '../utils/assetUrl';
 import { 
   ArrowRight, 
   FileText, 
@@ -23,13 +24,8 @@ export const Hero: React.FC<HeroProps> = ({ profileData, onOpenResume }) => {
     if (el) el.scrollIntoView({ behavior: 'smooth' });
   };
 
-  const backendOrigin = (import.meta.env.VITE_API_URL || 'http://localhost:5000/api').replace(/\/api\/?$/, '');
   const rawAvatar = profileData?.avatarUrl;
-  const avatarUrl = rawAvatar
-    ? rawAvatar.startsWith('http')
-      ? rawAvatar
-      : `${backendOrigin}${rawAvatar.startsWith('/') ? '' : '/'}${rawAvatar}`
-    : null;
+  const avatarUrl = getAssetUrl(rawAvatar) || null;
 
   return (
     <section id="home" className="relative min-h-[92vh] flex items-center justify-center pt-24 pb-16 px-4 sm:px-6 scroll-mt-28">

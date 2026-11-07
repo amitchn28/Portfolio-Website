@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useAuth } from '../context/AuthContext';
 import { adminApi } from '../services/api';
+import { getAssetUrl } from '../utils/assetUrl';
 import { 
   LayoutDashboard, 
   User, 
@@ -85,11 +86,7 @@ export const Layout: React.FC<LayoutProps> = ({ activeTab, onTabChange, children
       try {
         const prof = await adminApi.getProfile();
         if (prof?.avatarUrl) {
-          const apiBase = (import.meta.env.VITE_ADMIN_API_URL || import.meta.env.VITE_API_URL || 'http://localhost:5000/api').replace(/\/api\/?$/, '');
-          const fullUrl = prof.avatarUrl.startsWith('http')
-            ? prof.avatarUrl
-            : `${apiBase}${prof.avatarUrl.startsWith('/') ? '' : '/'}${prof.avatarUrl}`;
-          setAvatarUrl(fullUrl);
+          setAvatarUrl(getAssetUrl(prof.avatarUrl));
         }
       } catch {
         // silent fallback
@@ -172,7 +169,7 @@ export const Layout: React.FC<LayoutProps> = ({ activeTab, onTabChange, children
                   <span>Amit Chauhan</span>
                   <span className="text-[10px] font-mono px-1.5 py-0.5 rounded bg-amber-500/20 text-amber-300 border border-amber-500/30">CMS</span>
                 </div>
-                <div className="text-[11px] text-slate-500 font-mono truncate">localhost:3001 &bull; Private</div>
+                <div className="text-[11px] text-slate-500 font-mono truncate">Admin &bull; Private</div>
               </div>
             )}
           </div>
@@ -323,7 +320,7 @@ export const Layout: React.FC<LayoutProps> = ({ activeTab, onTabChange, children
 
             {/* Breadcrumb */}
             <div className="flex items-center space-x-2 text-xs">
-              <span className="text-slate-500 font-mono">localhost:3001</span>
+              <span className="text-slate-500 font-mono">CMS</span>
               <ChevronRight className="w-3.5 h-3.5 text-slate-600" />
               <span className="font-semibold text-amber-300">{currentItem?.label || activeTab}</span>
             </div>
@@ -351,7 +348,7 @@ export const Layout: React.FC<LayoutProps> = ({ activeTab, onTabChange, children
 
             {/* Public Portfolio Link */}
             <a
-              href="http://localhost:3000"
+              href={import.meta.env.VITE_SITE_URL || 'https://amiiit-portfolio.vercel.app'}
               target="_blank"
               rel="noreferrer"
               className="flex items-center space-x-1.5 px-3 py-1.5 rounded-lg text-xs font-medium bg-slate-900 hover:bg-slate-800 border border-slate-800 text-slate-300 hover:text-white transition-colors"

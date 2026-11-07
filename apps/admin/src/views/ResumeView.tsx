@@ -60,8 +60,8 @@ export const ResumeView: React.FC = () => {
 
     setUploading(true);
     try {
-      const uploaded = await adminApi.uploadFile(file, 'resume');
-      const uploadedUrl = uploaded?.url;
+      const res = await adminApi.uploadFile(file, 'resume');
+      const uploadedUrl = res?.url;
       setForm((prev) => ({ ...prev, fileUrl: uploadedUrl }));
       success('File uploaded to storage! Click "Save Resume Record" below to activate it.');
     } catch (err: any) {

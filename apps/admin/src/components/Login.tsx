@@ -95,7 +95,7 @@ export const Login: React.FC = () => {
               Administrator Access
             </h1>
             <p className="text-xs font-mono text-amber-300 mt-1">
-              localhost:3001 &bull; Private CMS
+              Admin &bull; Private CMS
             </p>
           </div>
         </div>

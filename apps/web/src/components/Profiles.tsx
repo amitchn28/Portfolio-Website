@@ -2,6 +2,7 @@ import React from 'react';
 import { motion } from 'framer-motion';
 import { Linkedin, Github } from 'lucide-react';
 import { useTheme } from '../context/ThemeContext';
+import { getAssetUrl } from '../utils/assetUrl';
 
 interface ProfilesProps {
   profileData?: any;
@@ -18,13 +19,8 @@ export const Profiles: React.FC<ProfilesProps> = ({ profileData, socialsList }) 
     socialsList?.find(s => s.platform?.toLowerCase() === 'github')?.url ||
     'https://github.com/amitchn28';
 
-  const backendOrigin = (import.meta.env.VITE_API_URL || 'http://localhost:5000/api').replace(/\/api\/?$/, '');
   const rawAvatar = profileData?.avatarUrl;
-  const avatarUrl = rawAvatar
-    ? rawAvatar.startsWith('http')
-      ? rawAvatar
-      : `${backendOrigin}${rawAvatar.startsWith('/') ? '' : '/'}${rawAvatar}`
-    : null;
+  const avatarUrl = getAssetUrl(rawAvatar) || null;
 
   return (
     <section id="profiles" className="py-20 px-4 sm:px-6 max-w-4xl mx-auto relative text-center scroll-mt-28">

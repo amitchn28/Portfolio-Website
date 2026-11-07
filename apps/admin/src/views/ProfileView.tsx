@@ -3,6 +3,7 @@ import { adminApi } from '../services/api';
 import { useToast } from '../context/ToastContext';
 import { Save, Loader2, Trash2, Camera, User, Crop } from 'lucide-react';
 import { ImageCropperModal } from '../components/ImageCropperModal';
+import { getAssetUrl } from '../utils/assetUrl';
 
 export const ProfileView: React.FC = () => {
   const { success, error } = useToast();
@@ -83,7 +84,7 @@ export const ProfileView: React.FC = () => {
   // Open cropper with existing photo to re-adjust position/zoom/rotation
   const handleAdjustCurrentPhoto = () => {
     if (!formData.avatarUrl) return;
-    setCropImageSrc(formData.avatarUrl);
+    setCropImageSrc(getAssetUrl(formData.avatarUrl));
     setIsCropperOpen(true);
   };
 
@@ -93,12 +94,12 @@ export const ProfileView: React.FC = () => {
     try {
       const res = await adminApi.uploadFile(croppedFile, 'profile');
       if (res?.url) {
-        const apiBase = (import.meta.env.VITE_ADMIN_API_URL || import.meta.env.VITE_API_URL || 'http://localhost:5000/api').replace(/\/api\/?$/, '');
-        const fullUrl = res.url.startsWith('http')
-          ? res.url
-          : `${apiBase}${res.url.startsWith('/') ? '' : '/'}${res.url}`;
-        setFormData((prev) => ({ ...prev, avatarUrl: fullUrl }));
-        success('Adjusted photo uploaded! Click "Save Profile Changes" below to save.');
+        const fullUrl = getAssetUrl(res.url);
+        const updated = { ...formData, avatarUrl: fullUrl };
+        setFormData(updated);
+        // Automatically save to PostgreSQL database immediately
+        await adminApi.updateProfile(updated);
+        success('Profile photo uploaded & saved to database successfully!');
         setIsCropperOpen(false);
       }
     } catch (err: any) {
@@ -159,7 +160,7 @@ export const ProfileView: React.FC = () => {
               <div className="relative w-28 h-28 sm:w-32 sm:h-32 rounded-full overflow-hidden border-2 border-amber-400/80 bg-space-950 flex items-center justify-center shadow-xl">
                 {formData.avatarUrl ? (
                   <img
-                    src={formData.avatarUrl}
+                    src={getAssetUrl(formData.avatarUrl)}
                     alt="Profile Avatar Preview"
                     className="w-full h-full object-cover rounded-full"
                     onError={(e) => {

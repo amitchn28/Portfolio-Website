@@ -77,7 +77,7 @@ export const AppearanceView: React.FC = () => {
         </div>
 
         <a
-          href="http://localhost:3000"
+          href={import.meta.env.VITE_SITE_URL || 'https://amiiit-portfolio.vercel.app'}
           target="_blank"
           rel="noopener noreferrer"
           className="self-start sm:self-auto px-4 py-2 rounded-xl bg-space-900 hover:bg-space-850 border border-slate-800 text-xs font-mono text-slate-300 hover:text-white flex items-center gap-1.5 transition-colors"
